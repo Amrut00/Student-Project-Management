@@ -26,7 +26,7 @@ A web-based platform designed to streamline student project management by provid
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/student-project-management-system.git
+   git clone https://github.com/your-username/Student-Project-Management.git
 
 2. Navigate to the project directory:
    ```bash
