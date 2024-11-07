@@ -12,8 +12,6 @@ Working on it
 - [Usage](#usage)
 - [Project Workflow](#project-workflow)
 - [Future Enhancements](#future-enhancements)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Features
 - **Student Dashboard**: Form project groups, prioritize faculty, and track project status.
