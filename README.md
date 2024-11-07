@@ -40,7 +40,7 @@ Working on it
    ```bash
    node index.js
 
-5. Open http://localhost:3000 in your browser.
+5. Open http://localhost:8080 in your browser.
 
 ## Usage
 -----
