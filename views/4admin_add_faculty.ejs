@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Faculty</title>
+    <link rel="stylesheet" href="/css/admin_add_faculty.css" />
+  </head>
+  <body>
+
+    <header>
+        <div class="logo-container">
+          <img src="/images/IIITP_Logo.jpeg" alt="IIITP Logo" class="logo-img">
+          <h1>Student Project Management</h1>
+        </div>
+        <nav>
+          <a href="/admin/dashboard">Admin</a>
+          <a href="/">Home</a>
+          <a href="/about">About</a>
+          <a href="/contact">Contact</a>
+          <a href="/admin/login">Logout</a>
+        </nav>
+      </header>
+
+    <form action="/admin/add_faculty">
+      <div class="card2">
+        <div class="headline">
+          <h2>
+            Add Faculty Details
+            <hr />
+          </h2>
+        </div>
+
+        <div class="content">
+            <span><b>Name</b></span>
+            <div class="nameDetails">
+                <input
+                    type="text"
+                    placeholder="First Name"
+                    class=""
+                    required
+                />
+                <input
+                    type="text"
+                    placeholder="Last Name"
+                    class=""
+                    required
+                />
+            </div>
+        </div>
+
+        <div class="content">
+            <span><b>Contact </b></span>
+            <input
+              type="tel"
+              placeholder="Enter Phone number"
+              class="input"
+              minlength="10"
+              required
+            />
+        </div>
+
+        <div class="content">
+            <span><b>Institute mail ID</b></span>
+            <input
+              type="email"
+              placeholder="Enter institute mail"
+              class="input"
+              required
+            />
+          </div>
+
+          <div class="content">
+            <span><b>Department of Work</b></span>
+            <select class="input" name="faculty_names" id="faculty_name">
+              <option value="default" hidden selected>Select Department</option>
+              <option value="name1">CSE</option>
+              <option value="name2">ECE</option>
+              <option value="name3">AMDS</option>
+              <option value="name3">HSS</option>
+            </select>
+          </div>
+
+        <div class="content">
+          <span><b>Create Password</b></span>
+          <input
+            type="password"
+            placeholder="Enter your password"
+            class="password input"
+            required
+            minlength="8"
+          />
+        </div>
+        <div class="content">
+            <span><b>Confirm Password</b></span>
+            <input
+              type="password"
+              placeholder="Re-enter password"
+              class="password input"
+              required
+              minlength="8"
+            />
+          </div>
+
+        <div class="btn">
+          <button class="animated-button">Add Faculty</button>
+        </div>
+      </div>
+    </form>
+
+  </body>
+</html>

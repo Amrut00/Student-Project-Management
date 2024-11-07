@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Allocate Faculty</title>
+    <link rel="stylesheet" href="/css/admin_allocate_faculty.css" />
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+          <img src="/images/IIITP_Logo.jpeg" alt="IIITP Logo" class="logo-img">
+          <h1>Student Project Management</h1>
+        </div>
+        <nav>
+            <a href="/admin/dashboard">Admin</a>
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+            <a href="/contact">Contact</a>
+            <a href="/admin/login">Logout</a>
+        </nav>
+    </header>
+        
+    <div class="faculty-container">
+        <h2>Allocate Faculty</h2>
+        <div class="form-group">
+        <label for="faculty-select">Choose Faculty</label>
+        <select id="faculty-select" class="form-control">
+            <option value="">Choose Faculty</option>
+        </select>
+        </div>
+        <div class="form-group">
+        <label for="assign-to">Assign to:</label>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="assign-to" id="student" value="student" checked>
+            <label class="form-check-label" for="student">
+            Student
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="assign-to" id="group" value="group">
+            <label class="form-check-label" for="group">
+            Group
+            </label>
+        </div>
+        <input type="text" class="form-control" id="student-or-group" placeholder="Enter student MIS number OR Group ID">
+        </div>
+        <button type="button" class="btn btn-primary">ASSIGN</button>
+    </div>
+</body>
+</html>

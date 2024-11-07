@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Staff Groups Dashboard</title>
+  <link rel="stylesheet" type="text/css" href="/css/staff_group_dashboard.css">
+</head>
+
+<body>
+    <header>
+        <div class="logo-container">
+          <img src="/images/IIITP_Logo.jpeg" alt="IIITP Logo" class="logo-img">
+          <h1>Student Project Management</h1>
+        </div>
+        <nav>
+          <a href="/">Home</a>
+          <a href="/about">About</a>
+          <a href="/contact">Contact</a>
+          <a href="/staff/login">Logout</a>
+        </nav>
+      </header>
+
+    <div class="heading">
+        <h1 class="title" >Project Title : <%= data[groupId-1].projectTitle %></h1>
+        <h2>Facultly Name : <%= facultyName %></h2>
+    </div>
+    <div class="options">
+        <button type="button" class="btn">Click Me!</button>
+        <button type="button" class="btn">Click Me!</button>
+        <button type="button" class="btn">Click Me!</button>
+        <button type="button" class="btn">Click Me!</button>
+    </div>
+    <div class="chatbox">
+        <h2>Chatbox</h2>
+        <div class="chat">
+            <div class="message-box">
+                
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

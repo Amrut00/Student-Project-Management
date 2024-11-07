@@ -1,0 +1,16 @@
+{
+  "name": "student_project_management_system",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Amrut Pathane, Omkar Dhumal, Anurag Kawade, Mohd Samar",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.21.1",
+    "student_project_management_system": "file:"
+  }
+}

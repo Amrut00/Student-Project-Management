@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact</title>
+  <link rel="stylesheet" href="/css/0home_contact.css">
+</head>
+<body>
+
+  <header>
+    <div class="logo-container">
+      <img src="/images/IIITP_Logo.jpeg" alt="IIITP Logo" class="logo-img">
+      <h1>Contact Us</h1>
+    </div>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/student/signup">Sign Up</a>
+      <a href="/student/login">Login</a>
+      <a href="/about">About</a>
+    </nav>
+  </header>
+
+  <section id="contact-info">
+    <h2>Contact Information</h2>
+    <div class="contact-card-container">
+      <div class="contact-card">
+        <h3>Amrut Pathane</h3>
+        <p>Contact No: +91 8600947050</p>
+        <p>Email: <a href="mailto:pathaneamrut@gmail.com">pathaneamrut@gmail.com</a></p>
+      </div>
+      <div class="contact-card">
+        <h3>Omkar Dhumal</h3>
+        <p>Contact No: +91 96657 73021</p>
+        <p>Email: <a href="mailto:xxxx@gmail.com">omkardhumal267@gmail.com</a></p>
+      </div>
+      <div class="contact-card">
+        <h3>Anurag Kawade</h3>
+        <p>Contact No: +91 72765 70717</p>
+        <p>Email: <a href="mailto:xxxx@gmail.com">xxxx@gmail.com</a></p>
+      </div>
+      <div class="contact-card">
+        <h3>Mohd Samar</h3>
+        <p>Contact No: +91 96219 72940</p>
+        <p>Email: <a href="mailto:xxxx@gmail.com">mohdsamarbinmehtab0786@gmail.com</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact-form">
+    <h2>Get in Touch</h2>
+    <div class="form-container">
+      <form action="/submit-contact-form" method="POST">
+        <div class="form-group">
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label for="contact">Contact No:</label>
+          <input type="tel" id="contact" name="contact" required>
+        </div>
+        <div class="form-group">
+          <label for="subject">Subject:</label>
+          <input type="text" id="subject" name="subject" required>
+        </div>
+        <div class="form-group">
+          <label for="message">Message:</label>
+          <textarea id="message" name="message" rows="5" required></textarea>
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2024 Student Project Management System </p>
+  </footer>
+
+</body>
+</html>

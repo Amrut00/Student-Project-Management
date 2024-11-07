@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Existing Groups</title>
+    <link rel="stylesheet" href="/css/faculty_existing.css">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="/images/IIITP_Logo.jpeg" alt="IIITP Logo" class="logo-img">
+            <h1>Student Project Management</h1>
+        </div>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+            <a href="/contact">Contact</a>
+            <a href="/faculty/login">Logout</a>
+        </nav>
+    </header>
+
+    <div class="navbar">
+        <a href="/faculty/dashboard/existing"><div class="navbar_content">Existing Group</div></a>
+        <a href="/faculty/dashboard/unallocated"><div class="navbar_content">To Be Allocated Group</div></a>
+    </div>
+
+    <div class="box-wrapper">
+        <h2>Existing Groups</h2>
+        <br><br>
+        <% 
+        let semGroups = {
+            B5: [],
+            B6: [],
+            B7: [],
+            B8: [],
+            M3: []
+        };
+
+        data.forEach(group => {
+            if (group.sem === "B5") semGroups.B5.push(group);
+            if (group.sem === "B6") semGroups.B6.push(group);
+            if (group.sem === "B7") semGroups.B7.push(group);
+            if (group.sem === "B8") semGroups.B8.push(group);
+            if (group.sem === "M3") semGroups.M3.push(group);
+        });
+        %>
+
+        <% Object.keys(semGroups).forEach(sem => { %>
+            <% if (semGroups[sem].length > 0) { %>
+                <div class="yearsem">
+                    <h3><%= sem === 'B5' ? '5th SEM' : sem === 'B6' ? '6th SEM' : sem === 'B7' ? '7th SEM' : sem === 'B8' ? '8th SEM' : 'Mtech 3rd SEM' %></h3>
+                </div>
+                <div class="container">
+                    <div class="groups">
+                        <% 
+                        let groupLimit = 6; 
+                        let groupsToShow = semGroups[sem].slice(0, groupLimit); 
+                        %>
+
+                        <% groupsToShow.forEach(group => { %>
+                            <div class="group-column">
+                                <div class="card">
+                                    <h3>Group <%= group.groupNo %></h3>
+                                    <h4><%= group.projectTitle %></h4>
+                                    <ul class="list">
+                                        <% group.studentName.forEach(student => { %>
+                                            <li><%= student %></li>
+                                        <% }); %>
+                                    </ul>
+                                    <div class="button-group">
+                                        <a href="/faculty/dashboard/existing/group/<%= group.groupNo %>"><button>View</button></a>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }); %>
+
+                        <% if (semGroups[sem].length > groupLimit) { %>
+                            <div class="more-groups">
+                                <p>There are more groups available. Please contact the admin to view them.</p>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+            <% } %>
+        <% }); %>
+    </div>
+</body>
+</html>
