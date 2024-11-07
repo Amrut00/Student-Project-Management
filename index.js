@@ -11,10 +11,6 @@ app.set("views", path.join(__dirname, "views"));
 
 app.use(express.static(path.join(__dirname, "public")));
 
-app.all("*", (req, res) => {
-  res.status(404).send("Page not found");
-});
-
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "0home.html"));
 });

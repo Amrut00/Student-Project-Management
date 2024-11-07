@@ -1,11 +1,9 @@
 {
   "name": "student_project_management_system",
   "version": "1.0.0",
-  "description": "A project management system for students, faculty, and staff",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "build": "echo \"No build step\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Amrut Pathane, Omkar Dhumal, Anurag Kawade, Mohd Samar",
