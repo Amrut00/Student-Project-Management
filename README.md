@@ -1,4 +1,4 @@
-# Student Project Management System
+# Student Project Management System (ongoing)
 
 A web-based platform designed to streamline student project management by providing customized workflows for students, faculty, staff, and admins. This system facilitates group formation, faculty assignment, and project tracking, making it easier for everyone involved to collaborate effectively.
 
