@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Search</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/editUser.css">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="/images/IIITP_Logo.jpeg" alt="IIITP Logo" class="logo-img">
+            <h1>Student Project Management</h1>
+        </div>
+        <nav>
+            <a href="/admin/dashboard">Admin</a>
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+            <a href="/contact">Contact</a>
+            <a href="/admin/login">Logout</a>
+        </nav>
+    </header>
+    
+    <h2>Edit User</h2>
+
+    <% var userId = user[userType + "_id"]; %>
+    
+    <form id="edit-form" action="/admin/update/<%= userType %>/<%= user[userType + '_id'] %>" method="POST">
+        <label>First Name:</label>
+        <input type="text" name="first_name" value="<%= user.first_name %>" required><br>
+    
+        <label>Last Name:</label>
+        <input type="text" name="last_name" value="<%= user.last_name %>" required><br>
+    
+        <label>Email:</label>
+        <input type="email" name="email" value="<%= user.email %>" required><br>
+    
+        <label>Contact Number:</label>
+        <input type="text" name="contact_number" value="<%= user.contact_number %>" required><br>
+    
+        <% if (userType === "student") { %>
+            <label>Degree:</label>
+            <select name="degree">
+                <option value="BTech" <%= user.degree === "BTech" ? "selected" : "" %>>BTech</option>
+                <option value="MTech" <%= user.degree === "MTech" ? "selected" : "" %>>MTech</option>
+                <option value="PhD" <%= user.degree === "PhD" ? "selected" : "" %>>PhD</option>
+            </select><br>
+    
+            <label>Branch:</label>
+            <select name="branch">
+                <option value="CSE" <%= user.branch === "CSE" ? "selected" : "" %>>CSE</option>
+                <option value="ECE" <%= user.branch === "ECE" ? "selected" : "" %>>ECE</option>
+            </select><br>
+    
+            <label>Semester:</label>
+            <select name="semester">
+                <% for (let i = 1; i <= 8; i++) { %>
+                    <option value="<%= i %>" <%= user.semester == i ? "selected" : "" %>><%= i %></option>
+                <% } %>
+            </select><br>
+    
+            <label>Status:</label>
+            <select name="status">
+                <option value="Allocated" <%= user.status === "Allocated" ? "selected" : "" %>>Allocated</option>
+                <option value="Pending" <%= user.status === "Pending" ? "selected" : "" %>>Pending</option>
+            </select><br>
+        <% } %>
+
+        <% if (userType === "faculty") { %>
+            <label>Department:</label>
+            <select name="department">
+                <option value="CSE" <%= user.department === "CSE" ? "selected" : "" %>>CSE</option>
+                <option value="ECE" <%= user.department === "ECE" ? "selected" : "" %>>ECE</option>
+            </select><br>
+        
+            <label>Specialization:</label>
+            <input type="text" name="specialization" value="<%= user.specialization %>" required><br>
+        
+            <label>Availability Status:</label>
+            <select name="availability_status">
+                <option value="Available" <%= user.availability_status === "Available" ? "selected" : "" %>>Available</option>
+                <option value="Unavailable" <%= user.availability_status === "Unavailable" ? "selected" : "" %>>Unavailable</option>
+            </select><br>
+        <% } %>
+
+        <% if (userType === "staff") { %>
+            <label for="mis_number">MIS Number:</label>
+            <input type="text" name="mis_number" value="<%= user.mis_number %>" required><br>
+
+        <% } %>        
+            
+        <button type="submit">Save Changes</button>
+    </form>      
+
+    <script src="/js/editUser.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</body>
+</html>

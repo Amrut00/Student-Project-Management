@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/group_details.css">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="/images/IIITP_Logo.jpeg" alt="IIITP Logo" class="logo-img">
+            <h1>Student Project Management</h1>
+        </div>
+        <nav>
+            <a href="/admin/view-groups"><i class="fas fa-arrow-left"></i> Back to Groups</a>
+            <a href="/admin/dashboard">Admin</a>
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+            <a href="/contact">Contact</a>
+            <a href="/admin/login">Logout</a>
+        </nav>
+    </header>
+
+    <div class="group-container">
+        <h2>Group Details</h2>
+        
+        <div class="info-section">
+            <h3>Group Information</h3>
+            <p><strong>Group ID:</strong> <%= group.group_id %></p>
+            <p><strong>Project Title:</strong> <%= group.project_title || "Not Assigned" %></p>
+            <p><strong>Project Domain:</strong> <%= group.project_domain || "Not Assigned" %></p>
+            <p><strong>Status:</strong> <%= group.status %></p>
+            <p><strong>Degree:</strong> <%= group.degree %></p>
+            <p><strong>Semester:</strong> <%= group.semester %></p>
+        </div>
+
+        <div class="info-section">
+            <h3>Faculty Information</h3>
+            <% if (group.faculty_first_name) { %>
+                <p><strong>Name:</strong> Dr. <%= group.faculty_first_name %> <%= group.faculty_last_name %></p>
+                <p><strong>Faculty ID:</strong> <%= group.faculty_id %></p>
+                <p><strong>Email:</strong> <%= group.faculty_email %></p>
+                <p><strong>Phone Number:</strong> <%= group.faculty_phone %></p>
+            <% } else { %>
+                <p>Faculty not assigned.</p>
+            <% } %>
+        </div>
+
+        <div class="info-section">
+            <h3>Assisting Staff Information</h3>
+            <% if (group.staff_first_name) { %>
+                <p><strong>Name:</strong> <%= group.staff_first_name %> <%= group.staff_last_name %></p>
+                <p><strong>Staff ID:</strong> <%= group.staff_id %></p>
+                <p><strong>Email:</strong> <%= group.staff_email %></p>
+                <p><strong>Phone Number:</strong> <%= group.staff_phone %></p>
+            <% } else { %>
+                <p>No assisting staff assigned.</p>
+            <% } %>
+        </div>
+
+        <div class="info-section">
+            <h3>Group Members</h3>
+            <% if (members.length > 0) { %>
+                <ul class="members-list">
+                    <% members.forEach(member => { %>
+                        <li>
+                            Student ID: <%= member.student_id %> <br>
+                            Name: <strong><%= member.first_name %> <%= member.last_name %> </strong><br>
+                            MIS no: <%= member.mis_number %> <br>
+                            Email: <%= member.email %> <br>
+                            Phone: <%= member.contact_number %>
+                        </li>
+                    <% }); %>
+                </ul>
+            <% } else { %>
+                <p>No members assigned.</p>
+            <% } %>
+        </div>
+    </div>
+
+</body>
+</html>

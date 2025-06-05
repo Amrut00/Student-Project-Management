@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/admin_dashboard.css" />
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="/images/IIITP_Logo.jpeg" alt="IIITP Logo" class="logo-img">
+            <h1>Student Project Management</h1>
+        </div>
+        <nav>
+            <a href="/admin/dashboard">Admin</a>
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+            <a href="/contact">Contact</a>
+            <a href="/admin/login">Logout</a>
+    
+            <% if (admin) { %>
+            <a href="/admin/profile" class="profile-circle" >
+                <%= admin.first_name.charAt(0).toUpperCase() %>
+            </a>
+            <% } %>
+        </nav>
+    </header>    
+
+    <div class="outer-container">
+        <div class="main-container">
+            <div class="store">
+                <a href="/admin/add_admin" class="box">
+                    <h2>Add Admin</h2>
+                </a>
+
+                <a href="/admin/add_student" class="box">
+                    <h2>Add Student</h2>
+                </a>
+
+                <a href="/admin/add_faculty" class="box">
+                    <h2>Add Faculty</h2>
+                </a>
+
+                <a href="/admin/add_staff" class="box">
+                    <h2>Add PhD Scholar</h2>
+                </a>
+
+                <a href="/admin/search-user" class="box">
+                    <h2>Search User</h2>
+                </a>  
+
+                <a href="/admin/allocate_faculty" class="box">
+                    <h2>Allocate Faculty</h2>
+                </a>
+
+                <a href="/admin/deallocate_faculty" class="box">
+                    <h2>Deallocate <br/> Faculty</h2>
+                </a>
+
+                <a href="/admin/view-groups" class="box">
+                    <h2>View All Groups</h2>
+                </a>
+
+                <a href="/admin/limits" class="box">
+                    <h2>Set Group Allocation Limits</h2>
+                </a>
+
+                <a href="/admin/panel/create" class="box">
+                    <h2>Create Panel</h2>
+                </a>
+
+                <a href="/admin/panels" class="box">
+                    <h2>View Panels</h2>
+                </a>                
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

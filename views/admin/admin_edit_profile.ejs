@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Profile</title>
+  <link rel="stylesheet" href="/css/admin_edit_profile.css">
+</head>
+<body>
+
+  <div class="container">
+    <h2>Edit Profile</h2>
+
+    <form action="/admin/update-profile" method="POST">
+      <label>Email:</label>
+      <input type="email" name="email" value="<%= admin.email %>" required>
+
+      <label>Contact Number:</label>
+      <input type="text" name="contact_number" value="<%= admin.contact_number %>" required>
+
+      <button type="submit">Save Changes</button>
+    </form>
+  </div>
+
+</body>
+</html>

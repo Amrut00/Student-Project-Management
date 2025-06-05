@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Groups</title>
+    <link rel="stylesheet" href="/css/view_groups.css">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="/images/IIITP_Logo.jpeg" alt="IIITP Logo" class="logo-img">
+            <h1>Student Project Management</h1>
+        </div>
+        <nav>
+            <a href="/admin/dashboard">Admin</a>
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+            <a href="/contact">Contact</a>
+            <a href="/admin/login">Logout</a>
+        </nav>
+    </header>
+
+    <h2>All Project Groups</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Group ID</th>
+                <th>Project Title</th>
+                <th>Project Domain</th>
+                <th>Faculty Name</th>
+                <th>Degree</th>
+                <th>Semester</th>
+                <th>Action</th>
+                <th>Manage</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% groups.forEach(group => { %>
+                <tr>
+                    <td><%= group.group_id %></td>
+                    <td><%= group.project_title || "Not Assigned" %></td>
+                    <td><%= group.project_domain || "Not Assigned" %></td>
+                    <td>
+                        <%= group.faculty_first_name ? `${group.faculty_first_name} ${group.faculty_last_name}` : "Not Assigned" %>
+                    </td>
+                    <td><%= group.degree %></td>
+                    <td><%= group.semester %></td>
+                    <td>
+                        <a href="/admin/group-details/<%= group.group_id %>" class="view-details-btn">View Details</a>
+                    </td>
+                    <td>
+                        <a href="/admin/manage-group/<%= group.group_id %>" class="view-details-btn manage-btn">Manage Group</a>
+                    </td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+</body>
+</html>

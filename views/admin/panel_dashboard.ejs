@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Panel Dashboard</title>
+    <link rel="stylesheet" href="/css/panel_dashboard.css">
+</head>
+<body>
+    <h2>Panel ID: <%= panel.panel_id %> — <%= panel.degree %> Semester <%= panel.semester %></h2>
+    <h3>Max Groups Allowed: <%= panel.max_groups %></h3>
+
+    <h3>Panel Members (<%= members.length %>)</h3>
+
+    <ul>
+      <% members.forEach(m => { %>
+        <li>
+          <strong><%= m.first_name %> <%= m.last_name %> — <%= m.department %></strong>
+          <form action="/admin/panel/<%= panel.panel_id %>/remove-faculty" method="POST" style="display:inline;">
+            <input type="hidden" name="faculty_id" value="<%= m.faculty_id %>">
+            <button type="submit" onclick="return confirm('Remove this faculty from the panel?')" style="margin-left:10px;">Remove</button>
+          </form>
+        </li>
+      <% }) %>
+    </ul>
+    
+    <% if (eligibleFaculty.length > 0) { %>
+      <form action="/admin/panel/<%= panel.panel_id %>/add-faculty" method="POST" style="margin-top: 15px;">
+        <label for="facultySelect"><strong>Add Faculty:</strong></label>
+        <select name="faculty_id" id="facultySelect" required>
+          <% eligibleFaculty.forEach(f => { %>
+            <option value="<%= f.faculty_id %>">
+              <%= f.first_name %> <%= f.last_name %> — <%= f.department %>
+            </option>
+          <% }) %>
+        </select>
+        <button type="submit">Add to Panel</button>
+      </form>
+    <% } else { %>
+      <p>No eligible faculty available for this degree and semester.</p>
+    <% } %>
+        
+
+    <h3>Assigned Groups (<%= groups.length %>)</h3>
+    <% if (groups.length > 0) { %>
+        <table>
+            <thead>
+                <tr>
+                    <th>Group ID</th>
+                    <th>Project Title</th>
+                    <th>Faculty Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% groups.forEach(g => { %>
+                    <tr>
+                        <td><%= g.group_id %></td>
+                        <td><%= g.project_title %></td>
+                        <td><%= g.faculty_first_name %> <%= g.faculty_last_name %></td>
+                        <td>
+                            <form method="POST" action="/admin/panel/<%= panel.panel_id %>/remove-group" onsubmit="return confirm('Remove this group from panel?');">
+                                <input type="hidden" name="group_id" value="<%= g.group_id %>">
+                                <button type="submit">Remove</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    <% } else { %>
+        <p>No groups have been assigned to this panel yet.</p>
+    <% } %>
+
+    <h3>Unassigned Groups for <%= panel.degree %> Semester <%= panel.semester %></h3>
+    <% if (unassignedGroups.length > 0) { %>
+        <table>
+            <thead>
+                <tr>
+                    <th>Group ID</th>
+                    <th>Project Title</th>
+                    <th>Faculty Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% unassignedGroups.forEach(g => { %>
+                    <tr>
+                        <td><%= g.group_id %></td>
+                        <td><%= g.project_title %></td>
+                        <td><%= g.faculty_first_name %> <%= g.faculty_last_name %></td>
+                        <td>
+                            <form method="POST" action="/admin/panel/<%= panel.panel_id %>/add-group">
+                                <input type="hidden" name="group_id" value="<%= g.group_id %>">
+                                <button type="submit">Add to Panel</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    <% } else { %>
+        <p>No unassigned groups found for this degree and semester.</p>
+    <% } %>
+
+
+    <br/>
+    <div class="actions-footer">
+        <h3>What would you like to do next?</h3>
+        <div class="actions-grid">
+          <div class="action-item">
+            <a href="/admin/panel/form?degree=<%= panel.degree %>&semester=<%= panel.semester %>">
+              <button>Create Another Panel</button>
+            </a>
+          </div>
+          <div class="action-item">
+            <a href="/admin/panel/form">
+              <button>Create Panel for Different Degree</button>
+            </a>
+          </div>
+          <div class="action-item">
+            <a href="/admin/panels">
+              <button>View all panels</button>
+            </a>
+          </div>
+          <div class="action-item delete-action">
+            <form action="/admin/panel/<%= panel.panel_id %>/delete" method="POST" onsubmit="return confirm('Are you sure you want to delete this panel? This action cannot be undone.');">
+              <button type="submit">Delete Panel</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      
+</body>
+</html>

@@ -1,0 +1,354 @@
+/* public/css/chatbox.css */
+.chatbox-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    height: 500px; /* Adjust as needed */
+}
+
+.chatbox-container h2 {
+    text-align: center;
+    padding: 10px;
+    margin: 0;
+    background-color: #e0e0e0;
+    border-bottom: 1px solid #ccc;
+    font-size: 1.2em;
+}
+
+.message-area {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 15px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+.message {
+    margin-bottom: 12px;
+    max-width: 75%;
+    padding: 8px 12px;
+    border-radius: 15px;
+    word-wrap: break-word;
+    position: relative;
+}
+
+.message .sender-name {
+    font-weight: bold;
+    font-size: 0.9em;
+    margin-bottom: 3px;
+    color: #555;
+}
+
+.message .timestamp {
+    font-size: 0.75em;
+    color: #999;
+    margin-top: 4px;
+    text-align: right;
+}
+
+/* Style for messages sent by the current user */
+.message.sent {
+    background-color: #dcf8c6;
+    align-self: flex-end; /* Align right */
+    border-bottom-right-radius: 5px;
+}
+
+/* Style for messages received from others */
+.message.received {
+    background-color: #eee;
+    align-self: flex-start; /* Align left */
+    border-bottom-left-radius: 5px;
+}
+
+
+
+.message a {
+    color: #007bff;
+    text-decoration: none;
+    display: inline-block; /* Allow padding */
+    padding: 5px 8px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin-top: 5px;
+}
+
+.message a:hover {
+    background-color: #e0e0e0;
+    text-decoration: underline;
+}
+
+.system-message {
+    text-align: center;
+    font-style: italic;
+    color: #888;
+    font-size: 0.9em;
+    margin: 10px 0;
+}
+
+.input-area {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    background-color: #f0f0f0;
+}
+
+#messageInput {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    margin-right: 10px;
+    outline: none;
+}
+
+#sendMessageBtn, #sendFileBtn {
+    padding: 10px 15px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+#sendFileBtn {
+    background-color: #6c757d;
+    margin-left: 5px;
+    font-size: 1.1em; /* Make icon slightly bigger */
+     padding: 8px 12px;
+}
+
+
+#sendMessageBtn:hover, #sendFileBtn:hover {
+    opacity: 0.9;
+}
+
+#uploadStatus {
+     align-self: center;
+}
+
+/* --- Pinned Messages --- */
+.pinned-messages-area {
+    min-height: 70px;
+    padding: 10px 15px 5px 15px; /* Added padding */
+    background-color: #fffaf0; /* Light yellowish background */
+    border-bottom: 1px solid #eee;
+     max-height: 150px; /* Limit height */
+     overflow-y: auto;
+     
+
+}
+.pinned-messages-area h4 {
+    margin: 0 0 8px 0;
+    font-size: 0.9em;
+    color: #666;
+}
+.pinned-messages-list .message {
+    /* Slightly different style for pinned items if needed */
+    background-color: #f0f8ff; /* Light blue background */
+    border: 1px solid #e0f0ff;
+     font-size: 0.9em; /* Slightly smaller */
+     margin-bottom: 6px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+.pinned-messages-list .message .sender-name {
+    font-size: 0.95em;
+}
+.pinned-messages-list .message .timestamp {
+    font-size: 0.85em;
+}
+hr.pin-divider {
+    border: 0;
+    border-top: 1px dashed #ddd;
+    margin: 10px 0 5px 0;
+}
+
+
+/* --- Input Area Enhancements --- */
+.input-area {
+    display: flex;
+    align-items: flex-end; /* Align items to bottom for textarea resize */
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    background-color: #f0f0f0;
+}
+#messageInput { /* Now a textarea */
+    flex-grow: 1;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 18px; /* Match button radius */
+    margin: 0 8px; /* Adjust margins */
+    outline: none;
+    resize: none; /* Disable manual resize handle */
+    overflow-y: auto; /* Allow scrolling if max height reached */
+    min-height: 38px; /* Match button approx height */
+    line-height: 1.4;
+    box-sizing: border-box;
+    font-family: inherit; /* Use same font as page */
+    font-size: 1em;
+}
+
+.emoji-button {
+     padding: 6px 8px; /* Adjust padding */
+     border: none;
+     background: none; /* Remove background */
+     font-size: 1.5em; /* Larger emoji */
+     cursor: pointer;
+     align-self: center; /* Center vertically */
+      margin-left: 5px;
+      line-height: 1; /* Prevent extra space */
+}
+.emoji-button:hover {
+    opacity: 0.8;
+}
+
+#sendFileBtn, #sendMessageBtn {
+    padding: 8px 15px; /* Consistent padding */
+    border: none;
+    color: white;
+    border-radius: 18px; /* Consistent radius */
+    cursor: pointer;
+    font-weight: bold;
+     height: 38px; /* Set fixed height to align with textarea min */
+     align-self: flex-end; /* Align to bottom */
+}
+#sendFileBtn { background-color: #6c757d; margin-left: 0; margin-right: 5px;}
+#sendMessageBtn { background-color: #007bff;}
+#sendFileBtn:hover, #sendMessageBtn:hover { opacity: 0.9; }
+
+/* Status Area below input */
+.status-area {
+    padding: 0 10px 5px 10px; /* Padding below input */
+    min-height: 1.2em; /* Reserve space */
+    font-size: 0.8em;
+    display: flex;
+    justify-content: space-between; /* Put statuses at ends */
+     background-color: #f0f0f0; /* Match input area background */
+}
+.upload-status { color: grey; }
+.editing-indicator { color: #ff7f50; /* Coral */ } /* Editing status */
+.cancel-edit-btn { /* Style cancel button */
+    margin-left: 5px;
+    background: none; border: none; color: #888; cursor: pointer; font-size: 0.9em;
+}
+
+
+/* --- Reply Styles --- */
+.reply-context-indicator {
+    padding: 5px 10px;
+    background-color: #e9e9e9;
+    font-size: 0.85em;
+    color: #555;
+    border-top: 1px solid #ccc;
+    display: flex; /* Use flex for alignment */
+    align-items: center; /* Center items vertically */
+}
+.reply-context-indicator strong {
+    margin: 0 3px;
+}
+.reply-context-indicator span {
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+     max-width: 200px; /* Limit preview width */
+     display: inline-block; /* Needed for ellipsis */
+}
+.cancel-reply-btn {
+    background: none; border: none; color: #666; cursor: pointer; margin-left: auto; /* Push to the right */ font-size: 1.2em; font-weight: bold; padding: 0 5px;
+}
+.cancel-reply-btn:hover { color: #000; }
+
+
+.reply-quote {
+    border-left: 3px solid #ccc;
+    padding-left: 8px;
+    margin: 4px 0 6px 0; /* Margin top/bottom */
+    font-size: 0.9em;
+    color: #666;
+    opacity: 0.9;
+     background-color: rgba(0, 0, 0, 0.02); /* Very subtle background */
+}
+.reply-quote-user { font-weight: bold; margin-right: 4px; }
+/* .reply-quote-text { Ensure ellipsis works here too if needed } */
+
+
+
+/* --- Edited Indicator --- */
+.message.edited .timestamp::after { /* Use ::after pseudo-element */
+    content: " (edited)";
+    font-style: italic;
+    color: #999;
+     font-size: 0.9em;
+     margin-left: 4px; /* Space from time */
+}
+
+
+/* --- Message Actions (Show on Hover) --- */
+.message-actions {
+    position: absolute; /* Position relative to message meta */
+    top: -10px; /* Position above */
+    right: 0px;
+    display: none; /* Hide by default */
+    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+     padding: 2px 4px;
+     z-index: 10;
+     opacity: 0; /* Start faded out */
+      transition: opacity 0.2s ease-in-out;
+}
+
+/* Show actions when hovering over the message or its meta area */
+.message:hover .message-actions {
+    display: inline-flex; /* Use flex for button layout */
+    opacity: 1;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1em; /* Adjust icon size */
+    padding: 3px 5px;
+    margin: 0 1px; /* Space buttons */
+    line-height: 1;
+     color: #555;
+}
+.action-btn:hover {
+    color: #000;
+    opacity: 0.8;
+}
+.action-btn.pinned { /* Style for already pinned icon */
+    color: #007bff; /* Blue color when pinned */
+}
+.unpin-icon { /* Tiny 'x' next to pin */
+    font-size: 0.6em;
+    color: #ff0000;
+    vertical-align: super;
+     margin-left: -2px;
+}
+
+/* Ensure meta-wrapper allows absolute positioning */
+.message-meta {
+    position: relative; /* Anchor for actions div */
+    text-align: right; /* Keep time right-aligned */
+     margin-top: 4px; /* Space above actions/time */
+}
+
+
+/* --- Emoji Picker --- */
+/* Add styles for emoji-picker-element positioning if needed */
+/* emoji-picker { */
+     /* Example positioning (adjust as needed) */
+    /* position: absolute;
+     bottom: 50px;
+     left: 10px;
+     z-index: 1000; */
+     /* These are set in JS, CSS can be backup */
+/* } */

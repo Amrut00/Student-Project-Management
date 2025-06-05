@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Staff</title>
+    <link rel="stylesheet" href="/css/signup.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <img src="/images/IIITP_Logo.jpeg" alt="IIITP Logo" class="logo-img">
+            <h1>Student Project Management</h1>
+        </div>
+        <nav>
+            <a href="/admin/dashboard">Admin</a>
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+            <a href="/contact">Contact</a>
+            <a href="/admin/login">Logout</a>
+        </nav>
+    </header>
+
+    <div id="main">
+
+        <!-- Add Admin Page Start -->
+        <div id="student_signup_page" class="form">
+          <form action="/admin/add_admin" method="POST" onsubmit="return validateForm()">
+              <div class="card2">
+                  <div class="headline">
+                      <h2>Add Admin</h2>
+                      <hr />
+                  </div>
+
+                  <div class="content">
+                      <div class="nameDetails">
+                          <label for="first_name"><b>First Name</b></label>
+                          <input type="text" placeholder="First Name" id="first_name" name="first_name" required />
+
+                          <label for="last_name"><b>Last Name</b></label>
+                          <input type="text" placeholder="Last Name" id="last_name" name="last_name" required />
+                      </div>
+                  </div>
+
+                  <div class="content">
+                      <label for="contact_number"><b>Contact</b></label>
+                      <input type="tel" placeholder="Enter Phone number" class="input" id="contact_number" name="contact_number"
+                          pattern="[0-9]{10}" maxlength="10" required />
+                  </div>
+
+                  <div class="content">
+                      <label for="email"><b>Email</b></label>
+                      <input type="email" placeholder="Enter email" class="input" id="email" name="email" required />
+                  </div>
+
+                  <div class="content">
+                      <label for="password"><b>Create Password</b></label>
+                      <input type="password" placeholder="Enter your password" id="password" name="password"
+                          class="password input" minlength="8" required oninput="checkPasswordMatch()" />
+                  </div>
+
+                  <div class="content">
+                      <label for="confirm_password"><b>Confirm Password</b></label>
+                      <input type="password" name="confirm_password" id="confirm_password" placeholder="Re-enter your password"
+                          class="password input" minlength="8" required oninput="checkPasswordMatch()" />
+                      <small id="password_error" style="color: red; display: none;">Passwords do not match</small>
+                  </div>
+
+                  <div class="btn">
+                      <button class="animated-button">Add</button>
+                  </div>
+              </div>
+          </form>
+        </div>
+        <!-- Add Admin Page End -->
+
+        <script>
+          function checkPasswordMatch() {
+              let password = document.getElementById("password").value;
+              let confirmPassword = document.getElementById("confirm_password").value;
+              let errorMessage = document.getElementById("password_error");
+
+              if (password !== confirmPassword) {
+                  errorMessage.style.display = "block";
+              } else {
+                  errorMessage.style.display = "none";
+              }
+          }
+
+          function validateForm() {
+              let password = document.getElementById("password").value;
+              let confirmPassword = document.getElementById("confirm_password").value;
+              if (password !== confirmPassword) {
+                  alert("Passwords do not match!");
+                  return false;
+              }
+              return true;
+          }
+        </script>
+
+
+</body>
+</html>

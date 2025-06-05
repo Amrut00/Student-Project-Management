@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Panels</title>
+    <link rel="stylesheet" href="/css/panel_list.css">
+</head>
+<body>
+    <h2>All Evaluation Panels</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Panel ID</th>
+                <th>Degree</th>
+                <th>Semester</th>
+                <th>Faculty Count</th>
+                <th>Group Count</th>
+                <th>Max Groups</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% panels.forEach(panel => { %>
+                <tr>
+                    <td><%= panel.panel_id %></td>
+                    <td><%= panel.degree %></td>
+                    <td><%= panel.semester %></td>
+                    <td><%= panel.faculty_count %></td>
+                    <td><%= panel.group_count %></td>
+                    <td><%= panel.max_groups %></td>
+                    <td>
+                        <a href="/admin/panel/<%= panel.panel_id %>">View Panel</a>
+                        <!-- Delete Panel Form -->
+                        <form action="/admin/panel/<%= panel.panel_id %>/delete" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this panel?');">
+                            <button type="submit" style="color:red;">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+
+    <a href="/admin/dashboard">Back to Dashboard</a>
+</body>
+</html>

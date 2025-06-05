@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Profile</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/student_profile.css">
+
+</head>
+<body>
+
+  <header>
+    <div class="logo-container">
+        <img src="/images/IIITP_Logo.jpeg" alt="IIITP Logo" class="logo-img">
+        <h1>Student Project Management</h1>
+    </div>
+
+    <nav style="display: flex; align-items: center; gap: 1rem;">
+        <a href="/student/<%= student.student_id %>/homepage">Student Dashboard</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+        <a href="/student/login">Logout</a>
+
+        <% if (student) { %>
+            <a href="/student/<%= student.student_id %>/profile" title="<%= student.first_name %>"
+                style="background-color: #007bff; color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                <%= student.first_name.charAt(0).toUpperCase() %>
+            </a>
+            <% } %>
+    </nav>
+  </header>
+
+  <div class="container mt-5">
+    <div class="card shadow p-4">
+      <h2 class="mb-4">Student Profile</h2>
+      <table class="table table-striped">
+        <tr><th>Student ID</th><td><%= student.student_id %></td></tr>
+        <tr><th>Full Name</th><td><%= student.first_name %> <%= student.last_name %></td></tr>
+        <tr><th>Email</th><td><%= student.email %></td></tr>
+        <tr><th>Contact Number</th><td><%= student.contact_number %></td></tr>
+        <tr><th>MIS Number</th><td><%= student.mis_number %></td></tr>
+        <tr><th>Degree</th><td><%= student.degree %></td></tr>
+        <tr><th>Branch</th><td><%= student.branch %></td></tr>
+        <tr><th>Semester</th><td><%= student.semester %></td></tr>
+      </table>
+
+      <div class="mt-4 d-flex justify-content-between">
+        <a href="/student/<%= student.student_id %>/homepage" class="btn btn-secondary">Back to Dashboard</a>
+        <a href="/student/<%= student.student_id %>/profile/edit" class="btn btn-primary">Edit Profile</a>
+        <a href="/student/<%= student.student_id %>/profile/change-password" class="btn btn-warning">Change Password</a>
+      </div>      
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Edit Profile</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/student_edit_profile.css">
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+        <img src="/images/IIITP_Logo.jpeg" alt="IIITP Logo" class="logo-img">
+        <h1>Student Project Management</h1>
+    </div>
+
+    <nav style="display: flex; align-items: center; gap: 1rem;">
+        <a href="/student/<%= student.student_id %>/homepage">Student Dashboard</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+        <a href="/student/login">Logout</a>
+
+        <% if (student) { %>
+            <a href="/student/<%= student.student_id %>/profile" title="<%= student.first_name %>"
+                style="background-color: #007bff; color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                <%= student.first_name.charAt(0).toUpperCase() %>
+            </a>
+            <% } %>
+    </nav>
+</header>
+
+  <div class="container mt-5">
+    <div class="card shadow p-4">
+      <h2 class="mb-4">Edit Profile</h2>
+      <form method="POST" action="/student/<%= student.student_id %>/profile/edit">
+        <div class="mb-3">
+          <label for="first_name" class="form-label">First Name</label>
+          <input type="text" class="form-control" id="first_name" name="first_name" value="<%= student.first_name %>" required />
+        </div>
+        <div class="mb-3">
+          <label for="last_name" class="form-label">Last Name</label>
+          <input type="text" class="form-control" id="last_name" name="last_name" value="<%= student.last_name %>" required />
+        </div>
+        <div class="mb-3">
+          <label for="contact_number" class="form-label">Contact Number</label>
+          <input type="text" class="form-control" id="contact_number" name="contact_number" value="<%= student.contact_number %>" required />
+        </div>
+        <div class="text-end">
+          <a href="/student/<%= student.student_id %>/profile" class="btn btn-secondary">Cancel</a>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

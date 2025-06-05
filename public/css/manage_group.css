@@ -1,0 +1,341 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary-color: #7C3AED;
+  --primary-gradient: linear-gradient(135deg, #7C3AED, #C084FC);
+  --secondary-color: #1F2937;
+  --accent-color: #F59E0B;
+  --background-color: #F3F4F6;
+  --text-color: #374151;
+  --card-bg: #FFFFFF;
+  --sidebar-bg: #1F2937;
+  --sidebar-hover: rgba(255, 255, 255, 0.1);
+  --input-border: #E5E7EB;
+  --input-focus: #7C3AED;
+  --success-color: #10B981;
+  --error-color: #EF4444;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --danger-color: #EF4444;
+  --delete-btn-color: #dc2626;
+  --delete-btn-hover: #b91c1c;
+  --table-header-bg: #f1f5f9;
+  --table-border: #e2e8f0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  min-height: 100vh;
+  line-height: 1.6;
+  background: linear-gradient(135deg, #F3F4F6 0%, #FFFFFF 100%);
+}
+
+/* header css start */
+header {
+  background-color: #2c3e50;
+  color: white;
+  padding: 0.5rem 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.318);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+  
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+  
+.logo-img {
+  height: 50px;
+  margin-right: 1rem;
+}
+  
+h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: white;
+}
+  
+nav a {
+  color: white;
+  margin: 0 15px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+  
+nav a:hover {
+  color: #e74c3c;
+}
+/* header css end */
+
+main {
+  width: 100%;
+  max-width: 1100px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+section {
+  background-color: var(--card-bg);
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: var(--shadow-lg);
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+  transform: translateY(0);
+  transition: var(--transition);
+  animation: fadeInUp 0.6s ease-out;
+}
+
+section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--primary-gradient);
+}
+
+section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(124, 58, 237, 0.15);
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--secondary-color);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--input-border);
+}
+
+h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--secondary-color);
+  margin-bottom: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+thead {
+  background-color: var(--table-header-bg);
+}
+
+th, td {
+  padding: 0.875rem;
+  border: 1px solid var(--table-border);
+  text-align: left;
+}
+
+th {
+  font-weight: 600;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+tbody tr:hover {
+  background-color: #f1f5f9;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 0.875rem;
+  border: 2px solid var(--input-border);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: var(--transition);
+  background-color: #FAFAFA;
+  margin-bottom: 1rem;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: var(--input-focus);
+  background-color: white;
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
+}
+
+input[type="text"]:hover {
+  border-color: var(--primary-color);
+}
+
+button {
+  background: var(--primary-gradient);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(124, 58, 237, 0.2);
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(124, 58, 237, 0.1);
+}
+
+.remove-btn {
+  background: #f97316;
+  background: linear-gradient(135deg, #f97316, #fb923c);
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+.remove-btn:hover {
+  background: linear-gradient(135deg, #ea580c, #f97316);
+}
+
+/* Improved Delete Group section styling */
+section:last-child {
+  text-align: center;
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+  border: 2px dashed rgba(239, 68, 68, 0.3);
+}
+
+section:last-child::before {
+  background: linear-gradient(135deg, #ef4444, #f87171);
+}
+
+section:last-child h2 {
+  color: var(--delete-btn-color);
+  display: inline-block;
+  border-bottom: 2px solid rgba(239, 68, 68, 0.3);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Improved Delete button */
+.delete-btn {
+  background: linear-gradient(135deg, #ef4444, #f87171);
+  color: white;
+  padding: 1rem 2.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 4px 6px rgba(239, 68, 68, 0.25);
+  margin: 0 auto;
+  display: block;
+  width: 250px;
+}
+
+.delete-btn:hover {
+  background: linear-gradient(135deg, #dc2626, #ef4444);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(239, 68, 68, 0.3);
+}
+
+.delete-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.2);
+}
+
+.student-search-form {
+  margin-bottom: 1.5rem;
+}
+
+.student-search-form form {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.student-search-form input {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.search-result-box {
+  background-color: #f8fafc;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.search-result-box p {
+  margin-bottom: 0.75rem;
+}
+
+.search-result-box form {
+  margin-top: 1rem;
+}
+
+.search-result-box em {
+  font-style: italic;
+  color: #64748b;
+}
+
+@media (max-width: 768px) {
+  section {
+    padding: 1.5rem;
+  }
+  
+  .student-search-form form {
+    flex-direction: column;
+  }
+  
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  nav a {
+    margin: 5px;
+  }
+  
+  .delete-btn {
+    width: 100%;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

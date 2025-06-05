@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <div class="container">
+    <h2>My Profile</h2>
+    <ul>
+        <li><strong>First Name:</strong> <%= staff.first_name %></li>
+        <li><strong>Last Name:</strong> <%= staff.last_name %></li>
+        <li><strong>Email:</strong> <%= staff.email %></li>
+        <li><strong>Contact Number:</strong> <%= staff.contact_number %></li>
+        <li><strong>MIS Number:</strong> <%= staff.mis_number %></li>
+    </ul>
+
+    <div style="margin-top: 20px;">
+        <a href="/staff/<%= staff.staff_id %>/edit" class="btn btn-primary">Edit Profile</a>
+        <a href="/staff/<%= staff.staff_id %>/change-password" class="btn btn-warning">Change Password</a>
+    </div>
+    </div>
+
+
+</body>
+</html>

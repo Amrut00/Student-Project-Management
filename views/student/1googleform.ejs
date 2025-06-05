@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Group Registration</title>
+  <link rel="stylesheet" href="/css/googleform.css" />
+</head>
+
+<body>
+  <header>
+    <div class="logo-container">
+      <img src="/images/IIITP_Logo.jpeg" alt="IIITP Logo" class="logo-img" />
+      <h1>Student Project Management</h1>
+    </div>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <form method="POST" action="/student/<%= studentId %>/form">
+      <div class="form-container">
+
+        <!-- Project Title -->
+        <div class="form-section card">
+          <h2>Project Details</h2>
+          <div class="input-group">
+            <label for="projectTitle">Project Title <span style="color: red;">*</span></label>
+            <input type="text" id="projectTitle" name="projectTitle" class="inputinimpdata" required>
+          </div>
+          <div class="input-group">
+            <label for="projectDomain">Project Domain <span style="color: red;">*</span></label>
+            <select id="projectDomain" name="projectDomain" class="inputinimpdata" required
+              onchange="toggleCustomDomain()">
+              <option value="">Select Domain</option>
+              <option value="Artificial Intelligence">Artificial Intelligence</option>
+              <option value="Machine Learning">Machine Learning</option>
+              <option value="Web Development">Web Development</option>
+              <option value="Data Science">Data Science</option>
+              <option value="Cyber Security">Cyber Security</option>
+              <option value="Software Engineering">Software Engineering</option>
+              <option value="Internet of Things (IoT)">Internet of Things (IoT)</option>
+              <option value="Blockchain">Blockchain</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <!-- Custom Domain (Hidden by Default) -->
+          <div class="input-group" id="customDomainContainer" style="display: none;">
+            <label for="customDomain">Enter Custom Domain</label>
+            <input type="text" id="customDomain" name="customDomain" class="inputinimpdata">
+          </div>
+        </div>
+
+        <!-- Leader Info -->
+        <div class="form-section card">
+          <h2>Leader Information</h2>
+          <div class="input-group">
+            <label for="leader_name">Full Name <span style="color: red;">*</span></label>
+            <input type="text" name="leader_name" placeholder="Full Name" class="inputinimpdata" required>
+          </div>
+          <div class="input-group">
+            <label for="leader_mis">MIS Number <span style="color: red;">*</span></label>
+            <input type="text" name="leader_mis" placeholder="MIS Number" class="inputinimpdata" required>
+          </div>
+          <div class="input-group">
+            <label for="leader_email">Institute Email <span style="color: red;">*</span></label>
+            <input type="email" name="leader_email" placeholder="Institute Email" class="inputinimpdata" required>
+          </div>
+          <div class="input-group">
+            <label for="leader_contact">Contact Number <span style="color: red;">*</span></label>
+            <input type="tel" name="leader_contact" placeholder="Contact Number" pattern="\d{10}" class="inputinimpdata"
+              required>
+          </div>
+        </div>
+
+        <!-- Group Members -->
+        <div class="form-section card">
+          <h2>Group Members</h2>
+          <% for (let i=2; i <=5; i++) { %>
+            <div class="member-card info-box">
+              <h3>Member <%= i %>
+              </h3>
+              <div class="input-group">
+                <label for="member_name_<%= i %>">Full Name <%- i <= 4 ? '<span style="color: red;">*</span>' : '' %></label>
+                <input type="text" name="members[<%= i %>][name]" placeholder="Full Name" class="inputinimpdata" <%=i
+                  <=4 ? 'required' : '' %>>
+              </div>
+              <div class="input-group">
+                <label for="member_mis_<%= i %>">MIS Number <%- i <= 4 ? '<span style="color: red;">*</span>' : '' %></label>
+                <input type="text" name="members[<%= i %>][mis]" placeholder="MIS Number" class="inputinimpdata" <%=i
+                  <=4 ? 'required' : '' %>>
+              </div>
+              <div class="input-group">
+                <label for="member_email_<%= i %>">Institute Email <%- i <= 4 ? '<span style="color: red;">*</span>' : '' %></label>
+                <input type="email" name="members[<%= i %>][email]" placeholder="Institute Email" class="inputinimpdata"
+                  <%=i <=4 ? 'required' : '' %>>
+              </div>
+              <div class="input-group">
+                <label for="member_contact_<%= i %>">Contact Number <%- i <= 4 ? '<span style="color: red;">*</span>' : '' %></label>
+                <input type="tel" name="members[<%= i %>][contact]" placeholder="Contact Number" pattern="\d{10}"
+                  class="inputinimpdata" <%=i <=4 ? 'required' : '' %>>
+              </div>
+            </div>
+            <% } %>
+        </div>
+
+        <!-- Faculty Preferences -->
+        <div class="form-section card">
+          <h2>Faculty Preferences</h2>
+          <% for(let i=1; i<=4; i++) { %>
+            <div class="input-group">
+              <label>Preference <%= i %> <span style="color: red;">*</span></label>
+              <select name="preferences[]" class="inputinimpdata faculty-select" required>
+                <option value="">Select Faculty</option>
+                <% faculties.forEach(faculty => { %>
+                  <option value="<%= faculty.faculty_id %>">
+                    Dr. <%= faculty.first_name %> <%= faculty.last_name %>
+                  </option>
+                <% }); %>
+              </select>
+            </div>
+          <% } %>
+        </div>
+
+
+        <button type="submit" class="final-submit animated-button">Submit</button>
+      </div>
+    </form>
+  </div>
+
+
+  <script src="/js/1googleform.js"></script>
+
+</body>
+
+</html>

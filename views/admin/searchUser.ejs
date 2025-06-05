@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Search</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/admin_search.css">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="/images/IIITP_Logo.jpeg" alt="IIITP Logo" class="logo-img">
+            <h1>Student Project Management</h1>
+        </div>
+        <nav>
+            <a href="/admin/dashboard">Admin</a>
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+            <a href="/contact">Contact</a>
+            <a href="/admin/login">Logout</a>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <h2>Search User</h2>
+    
+        <label for="user-type">Select User Type:</label>
+        <select id="user-type" onchange="updatePlaceholder()">
+            <option value="student">Student</option>
+            <option value="faculty">Faculty</option>
+            <option value="staff">PhD Scholar/Staff</option>
+        </select>        
+
+        <p id="infoText" style="margin-top: 5px; font-size: 14px; color: gray;"></p>
+    
+        <input type="text" id="search-input" placeholder="Enter ID or Phone no or email or MIS No">
+
+        <button onclick="searchUser()">Search</button>
+    
+        <div id="search-results"></div>
+    </div>
+    
+    <script src="/js/searchUser.js"></script>
+
+
+</body>
+</html>

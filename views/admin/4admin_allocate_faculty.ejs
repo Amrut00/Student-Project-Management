@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= mode === 'deallocate' ? 'Deallocate Faculty' : 'Allocate Faculty' %></title>
+    <link rel="stylesheet" href="/css/admin_allocate_faculty.css" />
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="/images/IIITP_Logo.jpeg" alt="IIITP Logo" class="logo-img">
+            <h1>Student Project Management</h1>
+        </div>
+        <nav>
+            <a href="/admin/dashboard">Admin</a>
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+            <a href="/contact">Contact</a>
+            <a href="/admin/login">Logout</a>
+        </nav>
+    </header>
+        
+    <div class="faculty-container">
+        <h2><%= mode === 'deallocate' ? 'Deallocate Faculty' : 'Allocate Faculty' %></h2>
+        <div class="form-group">
+            <% if (mode !== 'deallocate') { %>
+                <label for="faculty-select">Choose Faculty</label>
+                <select id="faculty-select" class="form-control">
+                    <option value="">Choose Faculty</option>
+                </select>
+            <% } %>
+        </div>
+
+        <div class="form-group">
+            <label for="student-or-group">Enter Group ID:</label>
+            <input type="text" class="form-control" id="student-or-group" placeholder="Enter Group ID">
+        </div>
+
+        <input type="hidden" id="operation-mode" value="<%= mode %>">
+        <button type="button" class="btn btn-primary" id="faculty-action-btn">
+            <%= mode === 'deallocate' ? 'DEALLOCATE' : 'ASSIGN' %>
+        </button>
+    </div>
+
+    <script src="/js/admin_allocate_faculty.js"></script>
+
+</body>
+</html>

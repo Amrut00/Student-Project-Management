@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Profile</title>
+  <link rel="stylesheet" href="/css/admin_profile.css">
+</head>
+<body>
+
+  <div class="container">
+    <h2>Admin Profile</h2>
+
+    <p><strong>Name:</strong> <%= admin.first_name %> <%= admin.last_name %></p>
+    <p><strong>Email:</strong> <%= admin.email %></p>
+    <p><strong>Contact Number:</strong> <%= admin.contact_number %></p>
+
+    <br>
+
+    <a href="/admin/edit-profile"><button>Edit Profile</button></a>
+    <a href="/admin/change-password"><button>Change Password</button></a>
+  </div>
+
+</body>
+</html>

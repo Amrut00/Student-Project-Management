@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/faculty_profile.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+          <img src="/images/IIITP_Logo.jpeg" alt="IIITP Logo" class="logo-img">
+          <h1>Student Project Management</h1>
+        </div>
+      
+        <nav style="display: flex; align-items: center; gap: 1rem;">
+          <a href="/">Home</a>
+          <a href="/about">About</a>
+          <a href="/contact">Contact</a>
+          <a href="/faculty/login">Logout</a>
+      
+          <% if (faculty) { %>
+            <a href="/faculty/<%= faculty.faculty_id %>/profile" title="<%= faculty.first_name %>" style="background-color: #007bff; color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+              <%= faculty.first_name.charAt(0).toUpperCase() %>
+            </a>
+          <% } %>
+        </nav>
+      </header>
+
+    <div class="container">
+        <% if (alert) { %>
+            <script>alert("<%= alert %>")</script>
+        <% } %>
+
+        <h2>Faculty Profile</h2>
+        <p><strong>Name:</strong> <%= faculty.first_name %> <%= faculty.last_name %></p>
+        <p><strong>Email:</strong> <%= faculty.email %></p>
+        <p><strong>Phone:</strong> <%= faculty.phone_number %></p>
+        <p><strong>Department:</strong> <%= faculty.department %></p>
+        <p><strong>Specialization:</strong> <%= faculty.specialization %></p>
+
+        <div class="button-container">
+            <a href="/faculty/<%= faculty.faculty_id %>/edit-profile">Edit Profile</a>
+            <a href="/faculty/<%= faculty.faculty_id %>/change-password">Change Password</a>
+        </div>
+    </div>
+
+</body>
+</html>

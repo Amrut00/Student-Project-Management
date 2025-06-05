@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staff Groups Dashboard</title>
+  <link rel="stylesheet" type="text/css" href="/css/staff_group_dashboard.css">
+  <link rel="stylesheet" href="/css/chatbox.css">
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="module" src="/modules/emoji-picker-element/dist/index.js"></script>
+</head>
+
+<body>
+    <header>
+        <div class="logo-container">
+          <img src="/images/IIITP_Logo.jpeg" alt="IIITP Logo" class="logo-img">
+          <h1>Student Project Management</h1>
+        </div>
+        <nav>
+          <a href="/">Home</a>
+          <a href="/about">About</a>
+          <a href="/contact">Contact</a>
+          <a href="/staff/login">Logout</a>
+        </nav>
+    </header>
+
+    <div class="heading">
+        <h1 class="title">Project Title: <%= projectTitle %></h1>
+        <h2>Faculty Name: <%= facultyName %></h2>
+        <h3>Project Domain: <%= projectDomain %></h3> <!-- Display the Project Domain here -->
+    </div>
+
+    <div class="group-members">
+        <h3>Group Members:</h3>
+        <ul>
+            <% members.forEach(member => { %>
+                <li><%= member %></li>
+            <% }); %>
+        </ul>
+    </div>
+
+    <div class="options">
+        <button type="button" class="btn">Click Me!</button>
+        <button type="button" class="btn">Click Me!</button>
+        <button type="button" class="btn">Click Me!</button>
+        <button type="button" class="btn">Click Me!</button>
+    </div>
+
+    <!-- Hidden fields required by chat.js -->
+    <input type="hidden" id="groupId" value="<%= groupId %>">
+    <input type="hidden" id="userId" value="<%= userId %>">    <!-- Must be passed correctly -->
+    <input type="hidden" id="userType" value="<%= userType %>"> <!-- Must be 'staff' -->
+
+     <!-- Chatbox Section - Verify class names match chatbox.css -->
+    <div class="chatbox-container">
+        <h2>Group Chat</h2>
+        <div id="pinnedMessages" class="pinned-messages-area" style="display: none;">
+            <h4>📌 Pinned Messages</h4>
+            <div id="pinnedMessagesList"></div>
+            <hr class="pin-divider">
+        </div>
+        <div id="chatMessages" class="message-area">
+            <p class="system-message">Loading chat...</p> <!-- Initial message -->
+        </div>
+        <div id="replyContextIndicator" class="reply-context-indicator" style="display: none;">
+            Replying to <strong id="replyUserName"></strong>: "<span id="replyMessagePreview"></span>"
+            <button id="cancelReplyBtn" class="cancel-reply-btn" type="button">×</button>
+        </div>
+        <div class="input-area">
+            <button id="emojiBtn" class="emoji-button" type="button">😀</button>
+            <textarea id="messageInput" placeholder="Type your message (Shift+Enter for newline)..." rows="1"></textarea>
+            <input type="file" id="fileInput" style="display: none;" accept="image/*,application/pdf,.doc,.docx,.txt,.zip,.rar,.7z,.csv,.xls,.xlsx,.ppt,.pptx,.c,.cpp,.java,.py,.js,.html,.css">
+            <button id="sendFileBtn" title="Attach File" type="button">📎</button>
+            <button id="sendMessageBtn" title="Send Message" type="button">Send</button>
+        </div>
+        <div class="status-area">
+            <span id="uploadStatus" class="upload-status"></span>
+            <span id="editingIndicator" class="editing-indicator" style="display: none;">Editing message... <button id="cancelEditBtn" class="cancel-edit-btn" type="button">Cancel</button></span>
+        </div>
+    </div>
+
+    <!-- Include the chat script (MUST be AFTER the hidden inputs and chatbox HTML) -->
+    <script src="/js/chat.js"></script>
+
+</body>
+</html>

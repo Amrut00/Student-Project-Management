@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Set Allocation Limits</title>
+  <link rel="stylesheet" href="/css/admin_set_limits.css">
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+        <img src="/images/IIITP_Logo.jpeg" alt="IIITP Logo" class="logo-img">
+        <h1>Student Project Management</h1>
+    </div>
+    <nav>
+        <a href="/admin/dashboard">Admin</a>
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+        <a href="/admin/login">Logout</a>
+    </nav>
+</header>
+
+  <h2>Set Faculty Allocation Limit</h2>
+
+  <form class="form1" action="/admin/limits/add" method="POST" id="limitsForm">
+    <label>Select Degrees:</label><br>
+    <div id="degree-selection">
+      <label>
+        <input type="checkbox" name="degree[]" value="BTech" id="btech-checkbox" onchange="updateDegreeOptions()"> BTech
+      </label>
+      <label>
+        <input type="checkbox" name="degree[]" value="MTech" id="mtech-checkbox" onchange="updateDegreeOptions()"> MTech
+      </label>
+      <label>
+        <input type="checkbox" name="degree[]" value="PhD" id="phd-checkbox" onchange="updateDegreeOptions()"> PhD
+      </label>
+      <label>
+        <input type="checkbox" name="degree[]" value="All Degrees" id="all-degrees-checkbox" onchange="updateDegreeOptions()"> All Degrees
+      </label>
+    </div>
+
+    <br><br>
+
+    <label>Select Semesters:</label>
+    <div id="semester-checkboxes">
+      <!-- Semester checkboxes will be generated here dynamically -->
+    </div>
+
+    <div id="degree-message" style="color: red;"></div>
+
+    <br><br>
+
+    <label>Allocation Limit:</label>
+    <input type="number" name="allocation_limit" required min="1">
+
+    <br><br>
+
+    <!-- Hidden input fields to capture final values -->
+    <input type="hidden" name="degree_hidden" id="hidden-degrees">
+    <input type="hidden" name="semester_hidden" id="hidden-semesters">
+
+    <button type="submit">Set Limit</button>
+  </form>
+
+  <h3>Existing Limits</h3>
+  <table border="1">
+    <tr>
+      <th>Degree</th>
+      <th>Semester</th>
+      <th>Allocation Limit</th>
+      <th>Action</th>
+    </tr>
+    <% if (limits && limits.length > 0) { %>
+      <% limits.forEach(limit => { %>
+        <tr>
+          <td><%= limit.degree %></td>
+          <td><%= (limit.semester == -1 || limit.semester === "-1") ? "All Semesters" : "Semester " + limit.semester %></td>
+          <td><%= limit.limit_count %></td>
+          <td>
+            <form action="/admin/limits/delete/<%= limit.limit_id %>" method="POST" class="form2">
+              <button type="submit" style="color: red;">Delete</button>
+            </form>
+          </td>
+        </tr>
+      <% }); %>
+    <% } else { %>
+      <tr>
+        <td colspan="4">No allocation limits set yet.</td>
+      </tr>
+    <% } %>
+  </table>
+
+  <script>
+
+  </script>
+  <script src="/js/admin_set_limits.js"></script>
+
+</body>
+</html>

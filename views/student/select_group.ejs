@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Your Group</title>
+    <link rel="stylesheet" href="/css/select_group.css">
+</head>
+<body>
+    
+    <header>
+        <div class="logo-container">
+          <img src="/images/IIITP_Logo.jpeg" alt="IIITP Logo" class="logo-img">
+          <h1 class="header-title">Student Project Management</h1>
+        </div>
+        <nav>
+          <a href="/">Home</a>
+          <a href="/about">About</a>
+          <a href="/contact">Contact</a>
+          <a href="/student/login">Logout</a>
+        </nav>
+      </header>
+
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>Select a Group</h2>
+        <a href="/student/form" class="btn btn-primary" 
+           style="text-decoration: none; padding: 10px 15px;">
+          + Create New Group
+        </a>
+    </div>
+
+    <form id="groupForm" action="/student/dashboard" method="POST">
+        <div class="group-container">
+            <% groups.forEach(group => { %>
+                <div class="group-card" onclick="selectGroup('<%= group.group_id %>', this)">
+                    <strong>Group ID:</strong> <%= group.group_id || "N/A" %><br>
+                    <strong>Project Title:</strong> <%= group.project_title || "No Title Assigned" %><br>
+                    <strong>Project Domain:</strong> <%= group.project_domain || "No Domain Assigned" %>
+                </div>
+            <% }) %>
+        </div>
+        
+        <!-- Hidden input to store selected group ID -->
+        <input type="hidden" name="selectedGroupId" id="selectedGroupId" required>
+    </form>
+
+    <script>
+        function selectGroup(groupId, element) {
+            // Store selected group ID
+            document.getElementById("selectedGroupId").value = groupId;
+
+            // Remove 'selected' class from all cards
+            document.querySelectorAll(".group-card").forEach(card => {
+                card.classList.remove("selected");
+            });
+
+            // Add 'selected' class to clicked card
+            element.classList.add("selected");
+
+            // Auto-submit the form
+            document.getElementById("groupForm").submit();
+        }
+    </script>
+
+
+
+</body>
+</html>

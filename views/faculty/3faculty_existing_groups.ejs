@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Existing Groups</title>
+    <link rel="stylesheet" href="/css/faculty_existing.css">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+          <img src="/images/IIITP_Logo.jpeg" alt="IIITP Logo" class="logo-img">
+          <h1>Student Project Management</h1>
+        </div>
+      
+        <nav style="display: flex; align-items: center; gap: 1rem;">
+          <a href="/">Home</a>
+          <a href="/about">About</a>
+          <a href="/contact">Contact</a>
+          <a href="/faculty/login">Logout</a>
+      
+          <% if (faculty) { %>
+            <a href="/faculty/<%= faculty.faculty_id %>/profile" title="<%= faculty.first_name %>" style="background-color: #007bff; color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+              <%= faculty.first_name.charAt(0).toUpperCase() %>
+            </a>
+          <% } %>
+        </nav>
+      </header>
+
+    <div class="navbar">
+        <a href="/faculty/<%= faculty_id %>/dashboard/existing"><div class="navbar_content">Existing Groups</div></a>
+        <a href="/faculty/<%= faculty_id %>/dashboard/unallocated"><div class="navbar_content">To Be Allocated Groups</div></a>
+    </div>
+
+    <div class="box-wrapper">
+        <h2>Existing Groups</h2>
+
+        <!-- Faculty Allocation Limit Overview -->
+        <div class="allocation-summary">
+            <h3>Faculty Allocation Limits</h3>
+            <% if (Object.keys(allocationLimits).length > 0) { %>
+                <ul>
+                    <% Object.keys(allocationLimits).forEach(category => { %>
+                        <li>
+                            <strong><%= category %>:</strong> 
+                            <%= facultyAllocationCounts[category] || 0 %> / 
+                            <%= allocationLimits[category] !== null ? allocationLimits[category] : "No Limit Set" %>
+                        </li>
+                    <% }) %>
+                </ul>
+            <% } else { %>
+                <p>No specific allocation limits set.</p>
+            <% } %>
+        </div>
+
+        <% if (Object.keys(groupedData).length > 0) { %>
+            <% Object.keys(groupedData).forEach(category => { %>
+                <div class="category-section">
+                    <h3><%= category.replace(" - Semester ", " - Semester ") %></h3> <!-- Better readability -->
+
+                    <p>
+                        <strong>Allocated Groups:</strong> <%= facultyAllocationCounts[category] || 0 %> /
+                        <strong>Allocation Limit:</strong> <%= allocationLimits[category] !== null ? allocationLimits[category] : "No Limit Set" %>
+                    </p>
+
+                    <div class="groups">
+                        <% groupedData[category].forEach(group => { %>
+                            <div class="card">
+                                <h4>Group <%= group.groupNo %></h4>
+                                <h5><%= group.projectTitle %></h5>
+                                <p><strong>Project Domain:</strong> <%= group.projectDomain || "Not Assigned" %></p>
+                                <ul class="list">
+                                    <% group.studentName.forEach(student => { %>
+                                        <li><%= student %></li>
+                                    <% }) %>
+                                </ul>
+                                <div class="button-group">
+                                    <a href="/faculty/<%= faculty_id %>/dashboard/existing/group/<%= group.groupNo %>">
+                                        <button>View</button>
+                                    </a>
+                                </div>
+                            </div>
+                        <% }) %>
+                    </div>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <div class="no-groups-message card">
+                <p>No Existing Groups.</p>
+            </div>
+        <% } %>
+    </div>
+
+</body>
+</html>

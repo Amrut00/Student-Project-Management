@@ -1,0 +1,239 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary-color: #7C3AED;
+  --primary-gradient: linear-gradient(135deg, #7C3AED, #C084FC);
+  --secondary-color: #1F2937;
+  --accent-color: #F59E0B;
+  --background-color: #F3F4F6;
+  --text-color: #374151;
+  --card-bg: #FFFFFF;
+  --sidebar-bg: #1F2937;
+  --sidebar-hover: rgba(255, 255, 255, 0.1);
+  --input-border: #E5E7EB;
+  --input-focus: #7C3AED;
+  --success-color: #10B981;
+  --error-color: #EF4444;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  min-height: 100vh;
+  background: linear-gradient(135deg, #F3F4F6 0%, #FFFFFF 100%);
+}
+
+/* header css start */
+header {
+  background-color: #2c3e50;
+  color: white;
+  padding: 0.5rem 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.318);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+  
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+  
+.logo-img {
+  height: 50px;
+  margin-right: 1rem;
+}
+  
+h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: white;
+}
+  
+nav a {
+  color: white;
+  margin: 0 15px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+  
+nav a:hover {
+  color: #e74c3c;
+}
+/* header css end */
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mt-5 {
+  margin-top: 3rem;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+h2{
+  font-size: 2rem;
+}
+
+/* Main dashboard card */
+.card {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  transition: var(--transition);
+  padding: 2.5rem;
+  max-width: 650px;
+  margin: 3rem auto;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Welcome message */
+.card h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--secondary-color);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.card h2::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 4px;
+  background: var(--primary-gradient);
+  margin: 1rem auto;
+  border-radius: 2px;
+}
+
+/* Create Group Button */
+.btn {
+  display: inline-block;
+  padding: 0.75rem 2.5rem;
+  border-radius: 50px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  text-align: center;
+  font-size: 1.125rem;
+  margin: 2rem auto;
+  background: var(--primary-gradient);
+  color: white;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  text-decoration: none;
+}
+
+/* Project Group Info */
+.project-group {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.project-group h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--secondary-color);
+  margin-bottom: 1.5rem;
+}
+
+.project-info {
+  margin: 1rem 0;
+  line-height: 1.8;
+}
+
+.project-info strong {
+  font-weight: 600;
+  color: var(--secondary-color);
+  margin-right: 0.5rem;
+}
+
+.project-status {
+  margin: 1rem 0;
+}
+
+.text-muted {
+  color: #6B7280;
+  font-size: 0.875rem;
+  margin-top: 1.5rem;
+  font-style: italic;
+  cursor: pointer;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    padding: 1rem;
+  }
+  
+  .logo-container {
+    margin-bottom: 1rem;
+  }
+  
+  nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  
+  nav a {
+    margin: 0.25rem 0.5rem;
+  }
+  
+  h1 {
+    font-size: 1.25rem;
+  }
+  
+  .card {
+    padding: 1.5rem;
+    margin: 2rem 1rem;
+  }
+  
+  .card h2 {
+    font-size: 1.5rem;
+  }
+  
+  .btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
+}

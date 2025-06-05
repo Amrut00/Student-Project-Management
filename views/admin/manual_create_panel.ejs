@@ -1,0 +1,95 @@
+<!-- views/admin/manual_create_panel.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Panel</title>
+    <link rel="stylesheet" href="/css/manual_create_panel.css">
+</head>
+<body>
+    <h2>Create Panel for <%= degree %> Semester <%= semester %></h2>
+
+    <form action="/admin/panel/create" method="POST">
+        <input type="hidden" name="degree" value="<%= degree %>">
+        <input type="hidden" name="semester" value="<%= semester %>">
+        
+        <label>
+            Max Groups per Panel:
+            <span style="color: gray;">(💡 Suggested: <%= suggestedMaxGroups %>)</span>
+        </label>
+        <input type="number" id="max_groups" name="max_groups" required value="<%= suggestedMaxGroups %>" />          
+
+        <div style="display: flex; justify-content: space-between;">
+            <% ['CSE', 'ECE', 'ASH'].forEach(dept => { %>
+            <div>
+                <h3><%= dept %></h3>
+                <% departments[dept].forEach(fac => { %>
+                    <label>
+                        <input 
+                          type="checkbox" 
+                          name="selectedFaculties" 
+                          value="<%= fac.faculty_id %>" 
+                          class="faculty-checkbox"
+                          data-groups="<%= fac.group_count %>"
+                          <%= fac.alreadyAssigned ? 'disabled' : '' %>
+                        >
+                        Dr. <%= fac.first_name %> <%= fac.last_name %> 
+                        (<%= fac.group_count %> groups)
+                        <% if (fac.alreadyAssigned) { %> — Already in Panel <% } %>
+                      </label><br/>
+                <% }) %>
+            </div>
+            <% }) %>
+        </div>
+
+        <div class="msg">
+            <p id="group-count">Total Groups: 0</p>
+            <p id="limit-warning" style="color:red;"></p>
+        </div>        
+        <button type="submit" id="submit-btn">Create Panel</button>
+
+    </form>
+
+    <form action="/admin/panel/auto-generate" method="POST">
+        <input type="hidden" name="degree" value="<%= degree %>">
+        <input type="hidden" name="semester" value="<%= semester %>">
+        <button type="submit" class="btn btn-primary">⚙️ Auto Generate Panels</button>
+    </form>
+
+    <script>
+    const checkboxes = document.querySelectorAll('.faculty-checkbox');
+    const groupCountDisplay = document.getElementById('group-count');
+    const limitWarning = document.getElementById('limit-warning');
+    const submitBtn = document.getElementById('submit-btn');
+    const maxInput = document.getElementById('max_groups');
+
+    function validateForm() {
+        const max = parseInt(maxInput.value);
+        let total = 0, selected = 0;
+
+        checkboxes.forEach(cb => {
+            if (cb.checked) {
+                total += parseInt(cb.dataset.groups);
+                selected++;
+            }
+        });
+
+        groupCountDisplay.textContent = "Total Groups: " + total;
+
+        if (selected === 0) {
+            limitWarning.textContent = "Select at least one faculty.";
+            submitBtn.disabled = true;
+        } else if (!isNaN(max) && total > max) {
+            limitWarning.textContent = "Group limit exceeded!";
+            submitBtn.disabled = true;
+        } else {
+            limitWarning.textContent = "";
+            submitBtn.disabled = false;
+        }
+    }
+
+    checkboxes.forEach(cb => cb.addEventListener('change', validateForm));
+    maxInput.addEventListener('input', validateForm);
+    </script>
+</body>
+</html>

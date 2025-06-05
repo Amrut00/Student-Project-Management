@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/faculty_edit_profile.css">
+
+    <title>Document</title>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+          <img src="/images/IIITP_Logo.jpeg" alt="IIITP Logo" class="logo-img">
+          <h1>Student Project Management</h1>
+        </div>
+      
+        <nav style="display: flex; align-items: center; gap: 1rem;">
+          <a href="/">Home</a>
+          <a href="/about">About</a>
+          <a href="/contact">Contact</a>
+          <a href="/faculty/login">Logout</a>
+      
+          <% if (faculty) { %>
+            <a href="/faculty/<%= faculty.faculty_id %>/profile" title="<%= faculty.first_name %>" style="background-color: #007bff; color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+              <%= faculty.first_name.charAt(0).toUpperCase() %>
+            </a>
+          <% } %>
+        </nav>
+      </header>
+
+    <h2>Edit Profile</h2>
+    <form method="POST" action="/faculty/<%= faculty.faculty_id %>/edit-profile">
+        <label>First Name: <input type="text" name="first_name" value="<%= faculty.first_name %>" required /></label><br>
+        <label>Last Name: <input type="text" name="last_name" value="<%= faculty.last_name %>" required /></label><br>
+        <label>Phone Number: <input type="text" name="phone_number" value="<%= faculty.phone_number %>" required /></label><br>
+        <label>Department: <input type="text" name="department" value="<%= faculty.department %>" required /></label><br>
+        <label>Specialization: <input type="text" name="specialization" value="<%= faculty.specialization %>" required /></label><br>
+
+        <button type="submit">Update Profile</button>
+    </form>
+
+</body>
+</html>

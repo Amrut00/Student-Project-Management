@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Homepage</title>
+    <link rel="stylesheet" href="/css/student_homepage.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="logo-container">
+            <img src="/images/IIITP_Logo.jpeg" alt="IIITP Logo" class="logo-img">
+            <h1>Student Project Management</h1>
+        </div>
+
+        <nav style="display: flex; align-items: center; gap: 1rem;">
+            <a href="/student/<%= student.student_id %>/homepage">Student Dashboard</a>
+            <a href="/about">About</a>
+            <a href="/contact">Contact</a>
+            <a href="/student/login">Logout</a>
+
+            <% if (student) { %>
+                <a href="/student/<%= student.student_id %>/profile" title="<%= student.first_name %>"
+                    style="background-color: #007bff; color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                    <%= student.first_name.charAt(0).toUpperCase() %>
+                </a>
+                <% } %>
+        </nav>
+    </header>
+
+    <div class="container text-center mt-5">
+        <h2>Welcome, <%= student.first_name %>!</h2>
+
+        <% if (!student.group_id) { %>
+            <div class="card mt-5">
+                <p>Can't see any groups?</p>
+                <a href="/student/<%= student.student_id %>/form" class="btn btn-primary btn-lg">Create a Group</a>
+            </div>
+            <% } else { %>
+                <div class="card mt-5 mx-auto" style="max-width: 500px; cursor: pointer;"
+                    onclick="window.location.href='/student/<%= student.student_id %>/check-group-status/<%= student.group_id %>'">
+                    <div class="card-body">
+                        <!-- <h5 class="card-title">Your Project Group</h5> -->
+                        <p class="card-text"><strong>Title:</strong>
+                            <%= student.project_title %>
+                        </p>
+                        <p class="card-text"><strong>Status:</strong>
+                            <%= student.group_status %>
+                        </p>
+                        <p class="text-muted">Click to open group dashboard</p>
+                    </div>
+                </div>
+                <% } %>
+    </div>
+
+
+</body>
+
+</html>

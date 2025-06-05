@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Select Degree & Semester</title>
+  <link rel="stylesheet" href="/css/select_degree_semester.css">
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+        <img src="/images/IIITP_Logo.jpeg" alt="IIITP Logo" class="logo-img">
+        <h1>Student Project Management</h1>
+    </div>
+    <nav>
+        <a href="/admin/dashboard">Admin</a>
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+        <a href="/admin/login">Logout</a>
+    </nav>
+  </header>
+
+  <section>
+    <h2>Select Degree and Semester</h2>
+
+    <form id="panelForm" method="POST">
+      <label for="degree">Degree:</label>
+      <select name="degree" id="degree" required onchange="updateSemesterOptions()">
+        <option value="">-- Select Degree --</option>
+        <option value="BTech">BTech</option>
+        <option value="MTech">MTech</option>
+        <option value="PhD">PhD</option>
+      </select>
+
+      <label for="semester">Semester:</label>
+      <select name="semester" id="semester" required>
+        <option value="">-- Select Semester --</option>
+      </select>
+
+      <br><br>
+
+      <label for="max_groups">Max Groups per Panel (for auto-generate only):</label>
+      <input type="number" name="max_groups" id="max_groups" min="1" value="5">
+
+      <br><br>
+
+      <button type="submit" onclick="submitToManual()">Manual Panel Create</button>
+      <button type="submit" onclick="submitToAutoGenerate()">Auto Generate Panels</button>
+    </form>
+  </section>
+
+  <script>
+    function updateSemesterOptions() {
+      const degree = document.getElementById('degree').value;
+      const semesterDropdown = document.getElementById('semester');
+      semesterDropdown.innerHTML = '<option value="">-- Select Semester --</option>';
+
+      let maxSem = 0;
+      if (degree === 'BTech') maxSem = 8;
+      else if (degree === 'MTech') maxSem = 4;
+      else if (degree === 'PhD') {
+        semesterDropdown.innerHTML = '<option value="-1">No Semester</option>';
+        return;
+      }
+
+      for (let i = 1; i <= maxSem; i++) {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.text = i;
+        semesterDropdown.appendChild(opt);
+      }
+    }
+
+    function submitToManual() {
+      const form = document.getElementById('panelForm');
+      form.action = "/admin/panel/create";
+      form.method = "GET";
+    }
+
+    function submitToAutoGenerate() {
+      const form = document.getElementById('panelForm');
+      form.action = "/admin/panel/auto-generate";
+      form.method = "POST";
+    }
+  </script>
+</body>
+</html>

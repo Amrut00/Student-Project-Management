@@ -1,0 +1,368 @@
+/* Unified dashboard styling with preserved footer styling */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary: #6366f1;
+  --primary-light: #818cf8;
+  --primary-dark: #4f46e5;
+  --secondary: #1e293b;
+  --accent: #f59e0b;
+  --background: #f1f5f9;
+  --card-bg: #ffffff;
+  --border: #e2e8f0;
+  --section-border: rgba(99, 102, 241, 0.2);
+  --text: #334155;
+  --text-light: #64748b;
+  --success: #10b981;
+  --error: #ef4444;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+  --radius: 0.5rem;
+  --transition: all 0.2s ease;
+}
+
+/* Base styles */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--background);
+  color: var(--text);
+  line-height: 1.6;
+  padding: 2rem;
+  margin: 0;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Main container - single unified card */
+body {
+  background-color: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  padding: 2rem;
+  border: 1px solid var(--border);
+}
+
+/* Panel header styling - IMPROVED VISIBILITY */
+h2 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--primary-dark);
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--primary-light);
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: linear-gradient(to right, rgba(99, 102, 241, 0.1), transparent);
+  padding: 0.75rem;
+  border-radius: var(--radius);
+}
+
+/* Section headers with dividers */
+h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--secondary);
+  margin: 2rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--section-border);
+  display: flex;
+  align-items: center;
+}
+
+h3::before {
+  content: '';
+  display: inline-block;
+  width: 0.75rem;
+  height: 0.75rem;
+  background-color: var(--primary);
+  border-radius: 50%;
+  margin-right: 0.75rem;
+}
+
+/* Content sections with subtle separation */
+body > h3:not(:first-of-type) {
+  margin-top: 2.5rem;
+}
+
+/* Faculty list styling */
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 1rem 0;
+  background-color: #f8fafc;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+ul li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1px;
+  border-left: 3px solid var(--primary);
+  transition: var(--transition);
+}
+
+ul li:last-child {
+  margin-bottom: 0;
+}
+
+ul li:hover {
+  background-color: rgba(99, 102, 241, 0.05);
+}
+
+ul li strong {
+  color: var(--secondary);
+}
+
+/* Table styling */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 1rem 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+}
+
+table th, 
+table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+table th {
+  background-color: #f1f5f9;
+  color: var(--secondary);
+  font-weight: 500;
+}
+
+table tr:last-child td {
+  border-bottom: none;
+}
+
+table tr:nth-child(even) {
+  background-color: #f8fafc;
+}
+
+table tr:hover {
+  background-color: #f1f5f9;
+}
+
+/* Form styling */
+form {
+  margin: 1rem 0;
+  padding: 1rem;
+  background-color: #f8fafc;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+select, 
+input[type="hidden"], 
+input[type="text"], 
+input[type="number"] {
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: 0.95rem;
+  outline: none;
+  transition: var(--transition);
+  background-color: white;
+}
+
+select:focus, 
+input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+/* Button styling - CONSISTENT */
+button {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.6rem 1rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Action buttons in tables and lists */
+td form, 
+li form {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+td button {
+  white-space: nowrap;
+}
+
+/* Remove/delete buttons */
+form[action*="remove"] button,
+form[action*="delete"] button {
+  background-color: var(--error);
+  height: 40px; /* Match other buttons */
+}
+
+form[action*="remove"] button:hover,
+form[action*="delete"] button:hover {
+  background-color: #dc2626;
+}
+
+/* Actions footer - MODIFIED TO REMOVE OUTER BOX */
+.actions-footer {
+  padding: 1rem 0;
+  margin-top: 3rem;
+  position: relative;
+  border-top: 2px solid var(--primary-light);
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.actions-footer h3 {
+  margin-bottom: 1.5rem;
+  color: var(--secondary);
+  position: relative;
+  padding-bottom: 0.75rem;
+  border-bottom: none;
+}
+
+.actions-footer h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--primary-light));
+  border-radius: 3px;
+}
+
+/* Grid layout for action buttons */
+.actions-grid {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.action-item {
+  flex: 1;
+  min-width: 180px;
+  max-width: 280px;
+}
+
+.action-item button {
+  width: 100%;
+  text-align: center;
+  white-space: nowrap;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  height: auto;
+  min-height: 2.75rem;
+}
+
+/* Delete action styling - REMOVED OUTER BOX */
+.delete-action form {
+  background: transparent;
+  padding: 0;
+  border: none;
+  margin: 0;
+}
+
+.delete-action button,
+form[action*="/delete"] button {
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
+  color: white;
+}
+
+.delete-action button:hover,
+form[action*="/delete"] button:hover {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  box-shadow: 0 4px 6px rgba(239, 68, 68, 0.25);
+}
+
+/* Links styling */
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Empty state messages */
+p:not(.actions-footer p) {
+  background-color: #f8fafc;
+  border-left: 3px solid var(--primary);
+  padding: 1rem;
+  border-radius: var(--radius);
+  margin: 1rem 0;
+}
+
+/* Responsiveness */
+@media (max-width: 992px) {
+  .actions-grid {
+    flex-wrap: wrap;
+  }
+  
+  .action-item {
+    flex: 1 1 45%;
+    max-width: none;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 1.25rem;
+  }
+  
+  ul li {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  ul li form {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .actions-grid {
+    flex-direction: column;
+  }
+  
+  .action-item {
+    flex: 1 1 100%;
+    width: 100%;
+    max-width: none;
+  }
+}

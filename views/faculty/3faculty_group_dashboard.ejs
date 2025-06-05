@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Group Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="/css/faculty_group_dashboard.css">
+    <link rel="stylesheet" href="/css/chatbox.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="module" src="/modules/emoji-picker-element/dist/index.js"></script>
+    <script>
+        function showStaffDropdown() {
+            document.getElementById("staffAssignForm").style.display = "block";
+        }
+    </script>
+</head>
+
+<body>
+    <header>
+        <div class="logo-container">
+          <img src="/images/IIITP_Logo.jpeg" alt="IIITP Logo" class="logo-img">
+          <h1>Student Project Management</h1>
+        </div>
+      
+        <nav style="display: flex; align-items: center; gap: 1rem;">
+          <a href="/">Home</a>
+          <a href="/about">About</a>
+          <a href="/contact">Contact</a>
+          <a href="/faculty/login">Logout</a>
+      
+          <% if (faculty) { %>
+            <a href="/faculty/<%= faculty.faculty_id %>/profile" title="<%= faculty.first_name %>" style="background-color: #007bff; color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+              <%= faculty.first_name.charAt(0).toUpperCase() %>
+            </a>
+          <% } %>
+        </nav>
+      </header>
+
+    <div class="heading">
+        <h1 class="title">Project Title: <%= projectTitle %></h1>
+        <p><strong>Project Domain:</strong> <%= projectDomain || "Not Assigned" %></p>
+        <h2>Faculty Name: <%= facultyName %></h2>
+    </div>
+
+    <div class="group-members">
+        <h3>Group Members</h3>
+        <ul>
+            <% members.forEach(member => { %>
+                <li><%= member %></li>
+            <% }); %>
+        </ul>
+    </div>
+
+    <div class="options">
+        <button type="button" class="btn" onclick="showStaffDropdown()">Assign Group to a Staff</button>
+        <button type="button" class="btn">Click Me!</button>
+        <button type="button" class="btn">Click Me!</button>
+        <button type="button" class="btn">Click Me!</button>
+    </div>
+
+    <!-- Hidden form to assign staff -->
+    <div id="staffAssignForm" style="display: none; margin-top: 20px;">
+        <form action="/faculty/<%= faculty_id %>/dashboard/existing/group/<%= groupId %>/assign-staff" method="POST">
+            <label for="staff">Select a Staff Member:</label>
+            <select name="staffId" required>
+                <% staffList.forEach(staff => { %>
+                    <option value="<%= staff.staff_id %>">
+                        <%= staff.first_name %> <%= staff.last_name %>
+                    </option>
+                <% }) %>
+            </select>
+            <button type="submit">Confirm Assignment</button>
+        </form>
+    </div>
+
+    <!-- Pass Group ID, User ID, and Type -->
+    <input type="hidden" id="groupId" value="<%= groupId %>">
+    <input type="hidden" id="userId" value="<%= userId %>">
+    <input type="hidden" id="userType" value="<%= userType %>">
+
+    <!-- Chatbox Section -->
+    <div class="chatbox-container">
+        <h2>Group Chat</h2>
+  
+        <!-- Pinned Messages Area -->
+        <div id="pinnedMessages" class="pinned-messages-area" style="display: none;">
+            <h4>📌 Pinned Messages</h4>
+            <div id="pinnedMessagesList"></div>
+             <hr class="pin-divider">
+        </div>
+  
+        <!-- Main Message Area -->
+        <div id="chatMessages" class="message-area">
+            <p class="system-message">Loading chat...</p>
+        </div>
+  
+         <!-- Reply Context Indicator -->
+         <div id="replyContextIndicator" class="reply-context-indicator" style="display: none;">
+             Replying to <strong id="replyUserName"></strong>: "<span id="replyMessagePreview"></span>"
+             <button id="cancelReplyBtn" class="cancel-reply-btn">×</button>
+         </div>
+  
+  
+        <!-- Input Area -->
+        <div class="input-area">
+             <!-- Emoji Picker Button -->
+            <button id="emojiBtn" class="emoji-button">😀</button>
+            <textarea id="messageInput" placeholder="Type your message (Shift+Enter for newline)..." rows="1"></textarea>
+             <input type="file" id="fileInput" style="display: none;" accept="image/*,application/pdf,.doc,.docx,.txt,.zip,.rar,.7z,.csv,.xls,.xlsx,.ppt,.pptx,.c,.cpp,.java,.py,.js,.html,.css"> <!-- Example accepts -->
+             <button id="sendFileBtn" title="Attach File">📎</button>
+             <button id="sendMessageBtn" title="Send Message">Send</button>
+         </div>
+          <!-- Upload Status & Edit Indicator -->
+         <div class="status-area">
+             <span id="uploadStatus" class="upload-status"></span>
+             <span id="editingIndicator" class="editing-indicator" style="display: none;">Editing message... <button id="cancelEditBtn" class="cancel-edit-btn">Cancel</button></span>
+         </div>
+    </div>
+
+
+    <script src="/js/chat.js"></script> 
+
+</body>
+</html>

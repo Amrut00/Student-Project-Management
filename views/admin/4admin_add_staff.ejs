@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Staff</title>
+    <link rel="stylesheet" href="/css/admin_add_staff.css" />
+  </head>
+  <body>
+
+    <header>
+      <div class="logo-container">
+          <img src="/images/IIITP_Logo.jpeg" alt="IIITP Logo" class="logo-img">
+          <h1>Student Project Management</h1>
+      </div>
+      <nav>
+          <a href="/admin/dashboard">Admin</a>
+          <a href="/">Home</a>
+          <a href="/about">About</a>
+          <a href="/contact">Contact</a>
+          <a href="/admin/login">Logout</a>
+      </nav>
+  </header>
+
+    <form action="/admin/add_staff" method="POST">
+      <div class="card2">
+        
+        <div class="headline">
+          <h2>
+            Add PhD Scholar / Staff Details
+            <hr />
+          </h2>
+        </div>
+
+        <div class="content">
+            <label for="first_name"><b>First Name</b></label>
+            <input type="text" placeholder="Enter First Name" id="first_name" name="first_name" required />
+        </div>
+
+        <div class="content">
+            <label for="last_name"><b>Last Name</b></label>
+            <input type="text" placeholder="Enter Last Name" id="last_name" name="last_name" required />
+        </div>
+
+        <div class="content">
+            <label for="mis_number"><b>MIS Number</b></label>
+            <input type="text" placeholder="Enter MIS number" id="mis_number" name="mis_number"
+                pattern="[0-9]{9}" title="MIS Number must be 9 digits" required />
+        </div>
+
+        <div class="content">
+            <label for="contact_number"><b>Contact</b></label>
+            <input type="tel" placeholder="Enter Phone number" name="contact_number" id="contact_number"
+                minlength="10" maxlength="10" pattern="[0-9]{10}" title="Enter a valid 10-digit number" required />
+        </div>
+
+        <div class="content">
+            <label for="email"><b>Institute Email</b></label>
+            <input type="email" placeholder="Enter institute email" name="email" id="email" required />
+        </div>
+
+        <div class="content form-group">
+          <label for="assisting_faculty_id"><b>Faculty Whom You Are Assisting</b></label>
+          <select name="assisting_faculty_id" id="assisting_faculty_id" required>
+              <option value="" hidden selected>Select Faculty</option>
+              <% faculties.forEach(faculty => { %>
+                  <option value="<%= faculty.faculty_id %>">
+                      Dr. <%= faculty.first_name %> <%= faculty.last_name %>
+                  </option>
+              <% }); %>
+          </select>
+      </div>
+
+
+        <div class="content">
+            <label for="password"><b>Create Password</b></label>
+            <input type="password" placeholder="Enter your password" name="password" id="password"
+                minlength="8" required oninput="checkPasswordStrength()" />
+            <small id="password_strength" style="color: red; display: none;"></small>
+        </div>
+
+        <div class="content">
+            <label for="confirm_password"><b>Confirm Password</b></label>
+            <input type="password" placeholder="Re-enter your password" name="confirm_password" id="confirm_password"
+                minlength="8" required oninput="checkPasswordMatch()" />
+            <small id="password_error" style="color: red; display: none;">Passwords do not match</small>
+        </div>
+
+        <div class="btn">
+          <button class="animated-button">Add PhD Scholar / Staff</button>
+        </div>
+
+      </div>
+    </form>
+
+    <!-- JavaScript for Password Validation -->
+<script>
+  function checkPasswordMatch() {
+      let password = document.getElementById("password").value;
+      let confirmPassword = document.getElementById("confirm_password").value;
+      let errorMessage = document.getElementById("password_error");
+
+      if (password !== confirmPassword) {
+          errorMessage.style.display = "block";
+      } else {
+          errorMessage.style.display = "none";
+      }
+  }
+
+  function checkPasswordStrength() {
+      let password = document.getElementById("password").value;
+      let strengthMessage = document.getElementById("password_strength");
+
+      if (password.length < 8) {
+          strengthMessage.textContent = "Password must be at least 8 characters long.";
+          strengthMessage.style.display = "block";
+      } else {
+          strengthMessage.style.display = "none";
+      }
+  }
+
+  function validateForm() {
+      let password = document.getElementById("password").value;
+      let confirmPassword = document.getElementById("confirm_password").value;
+      let faculty = document.getElementById("assisting_faculty_id").value;
+
+      if (password !== confirmPassword) {
+          alert("Passwords do not match!");
+          return false;
+      }
+
+      if (faculty === "") {
+          alert("Please select a faculty member you are assisting.");
+          return false;
+      }
+
+      return true;
+  }
+</script>
+
+  </body>
+</html>

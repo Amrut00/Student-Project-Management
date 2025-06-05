@@ -1,0 +1,204 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary-color: #7C3AED;
+  --primary-gradient: linear-gradient(135deg, #7C3AED, #C084FC);
+  --secondary-color: #1F2937;
+  --accent-color: #F59E0B;
+  --background-color: #F3F4F6;
+  --text-color: #374151;
+  --card-bg: #FFFFFF;
+  --sidebar-bg: #1F2937;
+  --sidebar-hover: rgba(255, 255, 255, 0.1);
+  --input-border: #E5E7EB;
+  --input-focus: #7C3AED;
+  --success-color: #10B981;
+  --error-color: #EF4444;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #F3F4F6 0%, #FFFFFF 100%);
+}
+
+.container {
+  width: 100%;
+  max-width: 800px;
+  background-color: var(--card-bg);
+  border-radius: 16px;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(0);
+  transition: var(--transition);
+  animation: fadeInUp 0.6s ease-out;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--primary-gradient);
+}
+
+.container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(124, 58, 237, 0.15);
+}
+
+h2 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  margin-bottom: 2rem;
+  color: var(--secondary-color);
+  text-align: center;
+  position: relative;
+  padding: 2rem 0 1.5rem;
+}
+
+h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: var(--primary-gradient);
+  border-radius: 3px;
+}
+
+form {
+  padding: 2.5rem 2.5rem 2rem 2.5rem;
+  width: 100%;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+  color: var(--secondary-color);
+}
+
+input[type="email"],
+input[type="text"] {
+  width: 100%;
+  padding: 0.875rem;
+  border: 2px solid var(--input-border);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: var(--transition);
+  background-color: #FAFAFA;
+  margin-bottom: 1.5rem;
+}
+
+input[type="email"]:focus,
+input[type="text"]:focus {
+  outline: none;
+  border-color: var(--input-focus);
+  background-color: white;
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
+}
+
+input[type="email"]:hover,
+input[type="text"]:hover {
+  border-color: var(--primary-color);
+}
+
+button[type="submit"] {
+  display: block;
+  margin: 1.5rem auto 0.5rem;
+  width: 100%;
+  background: var(--primary-gradient);
+  color: white;
+  padding: 1rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-md);
+  text-align: center;
+}
+
+button[type="submit"]:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(124, 58, 237, 0.2);
+}
+
+button[type="submit"]:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(124, 58, 237, 0.1);
+}
+
+/* Back link (if you want to add one) */
+.back-link {
+  display: block;
+  text-align: center;
+  margin: 0.5rem auto 2rem;
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: var(--transition);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  width: fit-content;
+}
+
+.back-link:hover {
+  color: var(--primary-color);
+  background-color: rgba(124, 58, 237, 0.1);
+  text-decoration: none;
+}
+
+/* Responsive styles */
+@media (max-width: 992px) {
+  .container {
+    max-width: 90%;
+  }
+}
+
+@media (max-width: 768px) {
+  form {
+    padding: 1.5rem 1.5rem 1rem 1.5rem;
+  }
+  
+  button[type="submit"] {
+    width: 100%;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

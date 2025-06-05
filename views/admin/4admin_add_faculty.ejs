@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Faculty</title>
+    <link rel="stylesheet" href="/css/admin_add_faculty.css" />
+  </head>
+  <body>
+
+    <header>
+      <div class="logo-container">
+          <img src="/images/IIITP_Logo.jpeg" alt="IIITP Logo" class="logo-img">
+          <h1>Student Project Management</h1>
+      </div>
+      <nav>
+          <a href="/admin/dashboard">Admin</a>
+          <a href="/">Home</a>
+          <a href="/about">About</a>
+          <a href="/contact">Contact</a>
+          <a href="/admin/login">Logout</a>
+      </nav>
+  </header>
+
+    <form action="/admin/add_faculty" method="POST">
+      <div class="card2">
+        <div class="headline">
+          <h2>
+            Add Faculty Details
+            <hr />
+          </h2>
+        </div>
+
+        <div class="content">
+          <label for="first_name"><b>First Name</b></label>
+          <input type="text" placeholder="Enter First Name" id="first_name" name="first_name" required />
+        </div>
+
+        <div class="content">
+          <label for="last_name"><b>Last Name</b></label>
+          <input type="text" placeholder="Enter Last Name" id="last_name" name="last_name" />
+        </div>
+
+        <div class="content">
+          <label for="phone_number"><b>Contact</b></label>
+          <input type="tel" placeholder="Enter Phone number" name="phone_number" id="phone_number"
+              minlength="10" maxlength="10" pattern="[0-9]{10}" title="Enter a valid 10-digit number" required />
+        </div>
+
+        <div class="content">
+          <label for="email"><b>Institute Email</b></label>
+          <input type="email" placeholder="Enter institute email" name="email" id="email" required />
+        </div>
+
+        <div class="content">
+          <label for="department"><b>Department of Work</b></label>
+            <select class="input" name="department" id="department">
+              <option value="default" hidden selected>Select Department</option>
+              <option value="Computer Science Engineering">Computer Science Engineering</option>
+              <option value="Electronics and Communication Engineering">Electronics and Communication Engineering</option>
+              <option value="Applied Mathematics and Data Science">Applied Mathematics and Data Science</option>
+              <option value="Humanities, Social Sciences and Management">Humanities, Social Sciences and Management</option>
+            </select>
+        </div>
+
+        <div class="content">
+          <label for="specialization"><b>Specialization</b></label>
+          <input type="text" placeholder="Enter Specialization" name="specialization" id="specialization" required />
+        </div>
+
+        <div class="content">
+          <label for="password"><b>Create Password</b></label>
+          <input
+            type="password"
+            placeholder="Enter your password"
+            class="password input"
+            id="password"
+            name="password"
+            required
+            minlength="8"
+          />
+        </div>
+        <div class="content">
+            <label for="confirm_password"><b>Confirm Password</b></label>
+            <input
+              type="password"
+              placeholder="Re-enter password"
+              id="confirm_password"
+              name="confirm_password"
+              class="password input"
+              required
+              minlength="8"
+            />
+          </div>
+
+        <div class="btn">
+          <button class="animated-button">Add Faculty</button>
+        </div>
+      </div>
+    </form>
+
+
+  </body>
+</html>

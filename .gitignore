@@ -1,0 +1,35 @@
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# System files
+.DS_Store
+Thumbs.db
+
+# OS or editor specific
+.vscode/
+.idea/
+
+# Production files (optional)
+dist/
+build/
+
+# Database dumps (if any)
+*.sql
+*.sqlite
+*.db
+
+# Coverage reports
+coverage/
+
+# Docker volumes
+**/docker-volume-data/

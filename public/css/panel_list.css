@@ -1,0 +1,224 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary-color: #7C3AED;
+  --primary-gradient: linear-gradient(135deg, #7C3AED, #C084FC);
+  --secondary-color: #1F2937;
+  --accent-color: #F59E0B;
+  --background-color: #F3F4F6;
+  --text-color: #374151;
+  --card-bg: #FFFFFF;
+  --sidebar-bg: #1F2937;
+  --sidebar-hover: rgba(255, 255, 255, 0.1);
+  --input-border: #E5E7EB;
+  --input-focus: #7C3AED;
+  --success-color: #10B981;
+  --error-color: #EF4444;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  min-height: 100vh;
+  padding: 2rem;
+  background: linear-gradient(135deg, #F3F4F6 0%, #FFFFFF 100%);
+}
+
+h2 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  margin-bottom: 2rem;
+  color: var(--secondary-color);
+  position: relative;
+  padding-bottom: 1.5rem;
+  text-align: center;
+}
+
+h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: var(--primary-gradient);
+  border-radius: 3px;
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  margin: 1rem 0 2rem;
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  border: none;
+}
+
+
+thead {
+  background: var(--primary-gradient);
+  color: white;
+}
+
+th {
+  padding: 1.25rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  position: relative;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+th:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 20%;
+  height: 60%;
+  width: 1px;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+
+th:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--input-border);
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tr:hover {
+  background-color: rgba(124, 58, 237, 0.05);
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: var(--transition);
+  font-weight: 500;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #5B21B6;
+}
+
+/* Back to Dashboard Link */
+a[href="/admin/dashboard"] {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.25rem;
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+  margin-top: 1rem;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+a[href="/admin/dashboard"]:hover {
+  background-color: rgba(124, 58, 237, 0.05);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  text-decoration: none;
+}
+
+a[href="/admin/dashboard"]::before {
+  content: '←';
+  margin-right: 0.5rem;
+  font-size: 1.1rem;
+}
+
+
+td:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+}
+
+a[href^="/admin/panel/"] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 0;
+  width: 100%;
+  background: var(--primary-gradient);
+  color: white;
+  border-radius: 6px;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+}
+
+a[href^="/admin/panel/"]:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  text-decoration: none;
+}
+
+td form {
+  width: 100%;
+}
+
+button, input[type="submit"] {
+  width: 100%;
+  background: linear-gradient(135deg, #EF4444, #DC2626);
+  color: white !important;
+  border: none;
+  padding: 0.5rem 0;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+  margin: 0;
+  text-align: center;
+}
+
+button:hover, input[type="submit"]:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+tbody tr:nth-child(even) {
+  background-color: rgba(124, 58, 237, 0.02);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  table {
+    display: block;
+    overflow-x: auto;
+  }
+  
+  td, th {
+    white-space: nowrap;
+  }
+}

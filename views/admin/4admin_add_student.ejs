@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Student</title>
+    <link rel="stylesheet" href="/css/admin_add_student.css" />
+  </head>
+  <body>
+
+    <header>
+      <div class="logo-container">
+          <img src="/images/IIITP_Logo.jpeg" alt="IIITP Logo" class="logo-img">
+          <h1>Student Project Management</h1>
+      </div>
+      <nav>
+          <a href="/admin/dashboard">Admin</a>
+          <a href="/">Home</a>
+          <a href="/about">About</a>
+          <a href="/contact">Contact</a>
+          <a href="/admin/login">Logout</a>
+      </nav>
+  </header>
+
+    <form action="/admin/add_student" method="POST">
+      <div class="card2">
+        <div class="headline">
+          <h2>
+            Add student
+            <hr />
+          </h2>
+        </div>
+
+        <div class="content">
+          <div class="nameDetails">
+              <label for="first_name"><b>First Name</b></label>
+              <input type="text" placeholder="First Name" id="first_name" name="first_name" required />
+          </div>
+      </div>
+
+      <div class="content">
+          <div class="nameDetails">
+              <label for="last_name"><b>Last Name</b></label>
+              <input type="text" placeholder="Last Name" id="last_name" name="last_name" required />
+          </div>
+      </div>
+
+      <!-- Degree dropdown, Branch and Semester fields start -->
+      <div class="content form-group">
+        <label for="degree">Degree</label>
+        <select id="degree" name="degree" onchange="handleDegreeChange()" required>
+          <option value="">Select Degree</option>
+          <option value="BTech">BTech</option>
+          <option value="MTech">MTech</option>
+          <option value="PhD">PhD</option>
+        </select>
+      </div>
+
+      <div class="content form-group" id="branchField" style="display: none;">
+        <label for="branch">Branch</label>
+        <select id="branch" name="branch">
+          <option value="">Select Branch</option>
+          <option value="CSE">Computer Science Engineering</option>
+          <option value="ECE">Electronics and Communication Engineering</option>
+        </select>
+      </div>
+
+      <div class="content form-group" id="semesterField" style="display: none;">
+        <label for="semester">Semester</label>
+        <select id="semester" name="semester">
+          <option value="">Select Semester</option>
+        </select>
+      </div>
+      <!-- Degree dropdown, Branch and Semester fields end -->
+
+      <div class="content">
+          <label for="mis_number"><b>MIS Number</b></label>
+          <input type="text" placeholder="Enter MIS number" id="mis_number" name="mis_number" class="input" required />
+      </div>
+
+      <div class="content">
+          <label for="contact_number"><b>Contact</b></label>
+          <input type="tel" placeholder="Enter Phone number" class="input" id="contact_number" name="contact_number"
+              pattern="[0-9]{10}" maxlength="10" required />
+      </div>
+
+      <div class="content">
+          <label for="email"><b>Institute Email</b></label>
+          <input type="email" placeholder="Enter institute mail" class="input" id="email" name="email" required />
+      </div>
+
+      <div class="content">
+          <label for="password"><b>Create Password</b></label>
+          <input type="password" placeholder="Enter your password" id="password" name="password"
+              class="password input" minlength="8" required oninput="checkPasswordMatch()" />
+      </div>
+
+      <div class="content">
+          <label for="confirm_password"><b>Confirm Password</b></label>
+          <input type="password" name="confirm_password" id="confirm_password" placeholder="Re-enter your password"
+              class="password input" minlength="8" required oninput="checkPasswordMatch()" />
+          <small id="password_error" style="color: red; display: none;">Passwords do not match</small>
+      </div>
+
+       
+          <button class="btn">Add Student</button>
+        </div>
+     
+    </form>
+
+
+    <script>
+      function checkPasswordMatch() {
+          let password = document.getElementById("password").value;
+          let confirmPassword = document.getElementById("confirm_password").value;
+          let errorMessage = document.getElementById("password_error");
+
+          if (password !== confirmPassword) {
+              errorMessage.style.display = "block";
+          } else {
+              errorMessage.style.display = "none";
+          }
+      }
+
+      function validateForm() {
+          let password = document.getElementById("password").value;
+          let confirmPassword = document.getElementById("confirm_password").value;
+          if (password !== confirmPassword) {
+              alert("Passwords do not match!");
+              return false;
+          }
+          return true;
+      }
+
+      function handleDegreeChange() {
+        const degree = document.getElementById("degree").value;
+        const branchField = document.getElementById("branchField");
+        const semesterField = document.getElementById("semesterField");
+        const semesterSelect = document.getElementById("semester");
+
+        // Remove existing classes first
+        branchField.classList.remove("show");
+        semesterField.classList.remove("show");
+
+        if (degree === "PhD") {
+          branchField.style.display = "none";
+          semesterField.style.display = "none";
+        } else if (degree === "BTech" || degree === "MTech") {
+          branchField.style.display = "block";
+          semesterField.style.display = "block";
+
+          // Add a slight delay before adding the show class for animation
+          setTimeout(() => {
+            branchField.classList.add("show");
+            semesterField.classList.add("show");
+          }, 10);
+
+          if (degree === "BTech") {
+            populateSemesters(8);
+          } else {
+            populateSemesters(4);
+          }
+        } else {
+          branchField.style.display = "none";
+          semesterField.style.display = "none";
+        }
+      }
+
+      function populateSemesters(totalSemesters) {
+        const semesterSelect = document.getElementById("semester");
+        semesterSelect.innerHTML = ""; // Clear existing options
+        const defaultOption = document.createElement("option");
+        defaultOption.value = "";
+        defaultOption.text = "Select Semester";
+        semesterSelect.appendChild(defaultOption);
+
+        for (let i = 1; i <= totalSemesters; i++) {
+          const option = document.createElement("option");
+          option.value = i;
+          option.text = `Semester ${i}`;
+          semesterSelect.appendChild(option);
+        }
+      }
+    </script>
+
+
+  </body>
+</html>
