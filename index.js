@@ -13,15 +13,17 @@ const sharedsession = require("express-socket.io-session");
 const db = require("./utils/db");
 
 // Session Middleware Setup
+app.set('trust proxy', 1);
+
 const sessionMiddleware = session({
-    secret: process.env.SESSION_SECRET || 'a_very_strong_secret_key_longer', // USE A STRONG ENV VARIABLE
+    secret: process.env.SESSION_SECRET || 'a_very_strong_secret_key_longer',
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {
         secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
-        // sameSite: 'lax'
-        maxAge: 24 * 60 * 60 * 1000 // 1 day
+        sameSite: 'lax',
+        maxAge: 24 * 60 * 60 * 1000
     }
 });
 
