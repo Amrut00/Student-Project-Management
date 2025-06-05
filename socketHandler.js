@@ -51,15 +51,15 @@ module.exports = (io, db) => {
         switch (user.type) {
             case 'student':
                 // Student needs to be a member of the group
-                query = `SELECT COUNT(*) AS count FROM Group_Members WHERE group_id = ? AND student_id = ?`;
+                query = `SELECT COUNT(*) AS count FROM group_members WHERE group_id = ? AND student_id = ?`;
                 break;
             case 'faculty':
                 // Faculty needs to be the allocated faculty for the group
-                query = `SELECT COUNT(*) AS count FROM \`Group\` WHERE group_id = ? AND allocated_faculty_id = ?`;
+                query = `SELECT COUNT(*) AS count FROM \`group\` WHERE group_id = ? AND allocated_faculty_id = ?`;
                 break;
             case 'staff':
                 // Staff needs to be the assisting staff for the group
-                 query = `SELECT COUNT(*) AS count FROM \`Group\` WHERE group_id = ? AND assisting_staff_id = ?`;
+                 query = `SELECT COUNT(*) AS count FROM \`group\` WHERE group_id = ? AND assisting_staff_id = ?`;
                  break;
             default:
                  console.error(`Authorization check failed: Unknown user type "${user.type}"`);
@@ -180,7 +180,7 @@ module.exports = (io, db) => {
                     try {
                          // Check if the message exists IN THE SAME GROUP
                         const [replyCheck] = await db.promise().query(
-                             'SELECT message_id FROM ChatMessage WHERE message_id = ? AND group_id = ?',
+                             'SELECT message_id FROM chatmessage WHERE message_id = ? AND group_id = ?',
                              [replyIdNum, groupId]
                          );
                         if (replyCheck.length > 0) {
@@ -200,7 +200,7 @@ module.exports = (io, db) => {
             // 5. Save message to the Database
             try {
                  const insertQuery = `
-                     INSERT INTO ChatMessage (
+                     INSERT INTO chatmessage (
                          group_id, sender_student_id, sender_faculty_id, sender_staff_id,
                          message_content, reply_to_message_id
                          -- Defaults handle timestamp, is_edited, edited_timestamp, is_pinned, is_file
@@ -273,7 +273,7 @@ module.exports = (io, db) => {
                  // 1. Verify message exists, check ownership and edit time window
                  const selectQuery = `
                     SELECT sender_student_id, sender_faculty_id, sender_staff_id, timestamp
-                    FROM ChatMessage
+                    FROM chatmessage
                     WHERE message_id = ? AND group_id = ?
                  `;
                  // Note: Fetched staff sender ID now
@@ -307,7 +307,7 @@ module.exports = (io, db) => {
 
                 // 2. Update the message in the Database
                 const updateQuery = `
-                    UPDATE ChatMessage
+                    UPDATE chatmessage
                     SET message_content = ?, is_edited = TRUE, edited_timestamp = NOW()
                     WHERE message_id = ?
                  `; // is_edited flag set, timestamp updated

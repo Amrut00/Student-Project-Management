@@ -88,7 +88,7 @@ exports.getDashboard = function(req, res) {
 
   const adminId = req.session.admin.admin_id; // ✅ Fetching admin_id correctly
 
-  const query = 'SELECT * FROM Admin WHERE admin_id = ?';
+  const query = 'SELECT * FROM admin WHERE admin_id = ?';
   db.query(query, [adminId], function(err, results) {
     if (err) {
       console.error("Database error:", err);
@@ -112,7 +112,7 @@ exports.viewProfile = function(req, res) {
 
   const adminId = req.session.admin.admin_id;
 
-  const sql = 'SELECT * FROM Admin WHERE admin_id = ?';
+  const sql = 'SELECT * FROM admin WHERE admin_id = ?';
   db.query(sql, [adminId], function(err, results) {
     if (err) return res.render('shared/error', { error: err });
     if (results.length === 0) return res.render('shared/error', { error: "Admin not found" });
@@ -128,7 +128,7 @@ exports.updateProfile = function(req, res) {
   const adminId = req.session.admin.admin_id;
   const { contact_number, email } = req.body;
 
-  const sql = 'UPDATE Admin SET contact_number = ?, email = ? WHERE admin_id = ?';
+  const sql = 'UPDATE admin SET contact_number = ?, email = ? WHERE admin_id = ?';
   db.query(sql, [contact_number, email, adminId], function(err) {
     if (err) return res.render('shared/error', { error: err });
 
@@ -172,7 +172,7 @@ exports.editProfilePage = function(req, res) {
   if (!req.session.admin) return res.redirect('/admin/login');
 
   const adminId = req.session.admin.admin_id;
-  const sql = 'SELECT * FROM Admin WHERE admin_id = ?';
+  const sql = 'SELECT * FROM admin WHERE admin_id = ?';
 
   db.query(sql, [adminId], function(err, results) {
     if (err || results.length === 0) {
@@ -231,7 +231,7 @@ exports.addStudent = async (req, res) => {
     const { first_name, last_name, mis_number, contact_number, email, password, degree, branch, semester } = req.body;
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const query = `INSERT INTO Student (first_name, last_name, mis_number, contact_number, email, password, degree, branch, semester, status) 
+    const query = `INSERT INTO student (first_name, last_name, mis_number, contact_number, email, password, degree, branch, semester, status) 
                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
     const values = [
       first_name, last_name, mis_number, contact_number, email, hashedPassword, degree, branch || null, semester || null, "pending",
@@ -279,7 +279,7 @@ exports.addStaff = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     db.query(
-      "INSERT INTO Staff (first_name, last_name, mis_number, contact_number, email, assisting_faculty_id, password) VALUES (?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO staff (first_name, last_name, mis_number, contact_number, email, assisting_faculty_id, password) VALUES (?, ?, ?, ?, ?, ?, ?)",
       [first_name, last_name, mis_number, contact_number, email, assisting_faculty_id, hashedPassword],
       (err) => {
         if (err) {
@@ -306,7 +306,7 @@ exports.addFaculty = async (req, res) => {
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
-    const query = "INSERT INTO Faculty (first_name, last_name, email, phone_number, department, specialization, availability_status, password) VALUES (?, ?, ?, ?, ?, ?, 'available', ?)";
+    const query = "INSERT INTO faculty (first_name, last_name, email, phone_number, department, specialization, availability_status, password) VALUES (?, ?, ?, ?, ?, ?, 'available', ?)";
 
     db.query(query, [first_name, last_name, email, phone_number, department, specialization, hashedPassword], (err) => {
       if (err) {
@@ -338,13 +338,13 @@ exports.searchUser = (req, res) => {
   let values;
 
   if (type === "student") {
-    sqlQuery = "SELECT * FROM Student WHERE student_id = ? OR mis_number = ? OR email = ? OR contact_number = ?";
+    sqlQuery = "SELECT * FROM student WHERE student_id = ? OR mis_number = ? OR email = ? OR contact_number = ?";
     values = [query, query, query, query];
   } else if (type === "faculty") {
-    sqlQuery = "SELECT * FROM Faculty WHERE faculty_id = ? OR email = ? OR phone_number = ?";
+    sqlQuery = "SELECT * FROM faculty WHERE faculty_id = ? OR email = ? OR phone_number = ?";
     values = [query, query, query];
   } else if (type === "staff") {
-    sqlQuery = "SELECT * FROM Staff WHERE staff_id = ? OR mis_number = ? OR email = ? OR contact_number = ?";
+    sqlQuery = "SELECT * FROM staff WHERE staff_id = ? OR mis_number = ? OR email = ? OR contact_number = ?";
     values = [query, query, query, query];
   } else {
     return res.status(400).json({ error: "Invalid user type." });
@@ -429,11 +429,11 @@ exports.editUser = (req, res) => {
 
   // Fetch all user details based on userType
   if (userType === "student") {
-      query = `SELECT * FROM Student WHERE student_id = ?`;
+      query = `SELECT * FROM student WHERE student_id = ?`;
   } else if (userType === "faculty") {
-      query = `SELECT * FROM Faculty WHERE faculty_id = ?`;
+      query = `SELECT * FROM faculty WHERE faculty_id = ?`;
   } else if (userType === "staff") {
-      query = `SELECT * FROM Staff WHERE staff_id = ?`;
+      query = `SELECT * FROM staff WHERE staff_id = ?`;
   } else {
       return res.status(400).json({ success: false, message: "Invalid user type" });
   }
@@ -472,7 +472,7 @@ exports.updateUser = (req, res) => {
 
   // Update student details
   if (userType === "student") {
-      query = `UPDATE Student SET first_name = ?, last_name = ?, email = ?, contact_number = ?, degree = ?, branch = ?, semester = ?, status = ?, group_id = ? WHERE student_id = ?`;
+      query = `UPDATE student SET first_name = ?, last_name = ?, email = ?, contact_number = ?, degree = ?, branch = ?, semester = ?, status = ?, group_id = ? WHERE student_id = ?`;
       params = [
           userData.first_name,
           userData.last_name,
@@ -502,7 +502,7 @@ exports.updateUser = (req, res) => {
   }
   // Update staff details
   else if (userType === "staff") {
-      query = `UPDATE Staff SET first_name = ?, last_name = ?, email = ?, contact_number = ?, mis_number = ?, assisting_faculty_id = ? WHERE staff_id = ?`;
+      query = `UPDATE staff SET first_name = ?, last_name = ?, email = ?, contact_number = ?, mis_number = ?, assisting_faculty_id = ? WHERE staff_id = ?`;
       params = [
           userData.first_name,
           userData.last_name,
@@ -591,7 +591,7 @@ exports.getFacultyListForAllocation = (req, res) => {
     return res.status(401).json({ error: "Unauthorized access. Please log in as an admin." });
   }
 
-  db.query("SELECT faculty_id, first_name, last_name FROM Faculty", (err, results) => {
+  db.query("SELECT faculty_id, first_name, last_name FROM faculty", (err, results) => {
       if (err) {
           console.error("Database error:", err);
           return res.status(500).json({ error: "Database error" });
@@ -613,7 +613,7 @@ exports.allocateFaculty = (req, res) => {
 
   // Allocate faculty to the group
   db.query(
-      "UPDATE `Group` SET allocated_faculty_id = ?, current_faculty_id = NULL WHERE group_id = ?",
+      "UPDATE `group` SET allocated_faculty_id = ?, current_faculty_id = NULL WHERE group_id = ?",
       [faculty_id, group_id],
       (err) => {
           if (err) {
@@ -622,7 +622,7 @@ exports.allocateFaculty = (req, res) => {
           }
 
           // Check if group status is Pending
-          db.query("SELECT status FROM `Group` WHERE group_id = ?", [group_id], (err, groupResult) => {
+          db.query("SELECT status FROM `group` WHERE group_id = ?", [group_id], (err, groupResult) => {
               if (err) {
                   console.error("Error checking group status:", err);
                   return res.status(500).json({ message: "Error checking group status." });
@@ -630,7 +630,7 @@ exports.allocateFaculty = (req, res) => {
 
               if (groupResult.length > 0 && groupResult[0].status === "Pending") {
                   // Update group status to Allocated
-                  db.query("UPDATE `Group` SET status = 'Allocated' WHERE group_id = ?", [group_id], (err) => {
+                  db.query("UPDATE `group` SET status = 'Allocated' WHERE group_id = ?", [group_id], (err) => {
                       if (err) {
                           console.error("Error updating group status:", err);
                           return res.status(500).json({ message: "Error updating group status." });
@@ -639,7 +639,7 @@ exports.allocateFaculty = (req, res) => {
                       // Update student status to Allocated
                       // Update student status to 'Allocated' for all students in the given group
                       db.query(
-                        "UPDATE Student SET status = 'Allocated' WHERE student_id IN (SELECT student_id FROM Group_Members WHERE group_id = ?)",
+                        "UPDATE student SET status = 'Allocated' WHERE student_id IN (SELECT student_id FROM group_members WHERE group_id = ?)",
                         [group_id],
                         (err) => {
                             if (err) {
@@ -672,15 +672,15 @@ exports.deallocateFaculty = (req, res) => {
   }
 
   // Remove faculty from allocated_faculty_id
-  db.query("UPDATE `Group` SET allocated_faculty_id = NULL, assisting_staff_id = NULL WHERE group_id = ?", [group_id], (err) => {
+  db.query("UPDATE `group` SET allocated_faculty_id = NULL, assisting_staff_id = NULL WHERE group_id = ?", [group_id], (err) => {
       if (err) {
           console.error("Error deallocating faculty:", err);
           return res.status(500).json({ message: "Error deallocating faculty." });
       }
 
-      // Get first faculty preference from `Group_Faculty_Preferences`
+      // Get first faculty preference from `group_faculty_preferences`
       db.query(
-          "SELECT faculty_id FROM Group_Faculty_Preferences WHERE group_id = ? ORDER BY preference_order ASC LIMIT 1",
+          "SELECT faculty_id FROM group_faculty_preferences WHERE group_id = ? ORDER BY preference_order ASC LIMIT 1",
           [group_id],
           (err, facultyPreferences) => {
               if (err) {
@@ -691,14 +691,14 @@ exports.deallocateFaculty = (req, res) => {
               let firstFacultyId = facultyPreferences.length > 0 ? facultyPreferences[0].faculty_id : null;
 
               // Update current_faculty_id back to first preference
-              db.query("UPDATE `Group` SET current_faculty_id = ? WHERE group_id = ?", [firstFacultyId, group_id], (err) => {
+              db.query("UPDATE `group` SET current_faculty_id = ? WHERE group_id = ?", [firstFacultyId, group_id], (err) => {
                   if (err) {
                       console.error("Error updating current_faculty_id:", err);
                       return res.status(500).json({ message: "Error updating current_faculty_id." });
                   }
 
                   // Update group status to Pending
-                  db.query("UPDATE `Group` SET status = 'Pending' WHERE group_id = ?", [group_id], (err) => {
+                  db.query("UPDATE `group` SET status = 'Pending' WHERE group_id = ?", [group_id], (err) => {
                       if (err) {
                           console.error("Error updating group status:", err);
                           return res.status(500).json({ message: "Error updating group status." });
@@ -706,7 +706,7 @@ exports.deallocateFaculty = (req, res) => {
 
                       // Update student status to Pending
                       db.query(
-                        "UPDATE Student SET status = 'Pending' WHERE student_id IN (SELECT student_id FROM Group_Members WHERE group_id = ?)",
+                        "UPDATE student SET status = 'Pending' WHERE student_id IN (SELECT student_id FROM group_members WHERE group_id = ?)",
                         [group_id],
                         (err) => {
                             if (err) {
@@ -735,9 +735,9 @@ exports.viewGroups = (req, res) => {
              f.first_name AS faculty_first_name, f.last_name AS faculty_last_name, 
              COALESCE(s.degree, 'Unknown') AS degree, 
              COALESCE(s.semester, 'Unknown') AS semester
-      FROM \`Group\` g
-      LEFT JOIN Faculty f ON g.allocated_faculty_id = f.faculty_id
-      LEFT JOIN Student s ON g.leader_id = s.student_id
+      FROM \`group\` g
+      LEFT JOIN faculty f ON g.allocated_faculty_id = f.faculty_id
+      LEFT JOIN student s ON g.leader_id = s.student_id
       ORDER BY degree ASC, semester ASC`;
 
   db.query(query, (err, results) => {
@@ -765,10 +765,10 @@ exports.getGroupDetails = (req, res) => {
              st.email AS staff_email, st.contact_number AS staff_phone, 
              COALESCE(s.degree, 'Unknown') AS degree, 
              COALESCE(s.semester, 'Unknown') AS semester
-      FROM \`Group\` g
-      LEFT JOIN Faculty f ON g.allocated_faculty_id = f.faculty_id
+      FROM \`group\` g
+      LEFT JOIN faculty f ON g.allocated_faculty_id = f.faculty_id
       LEFT JOIN Staff st ON g.assisting_staff_id = st.staff_id
-      LEFT JOIN Student s ON g.leader_id = s.student_id
+      LEFT JOIN student s ON g.leader_id = s.student_id
       WHERE g.group_id = ?`;
 
   db.query(query, [groupId], (err, groupResults) => {
@@ -785,8 +785,8 @@ exports.getGroupDetails = (req, res) => {
           SELECT s.student_id, s.first_name, s.last_name, s.mis_number, s.email, 
                  s.contact_number, COALESCE(s.degree, 'Unknown') AS degree, 
                  COALESCE(s.semester, 'Unknown') AS semester
-          FROM Group_Members gm
-          JOIN Student s ON gm.student_id = s.student_id
+          FROM group_members gm
+          JOIN student s ON gm.student_id = s.student_id
           WHERE gm.group_id = ?
           ORDER BY s.first_name, s.last_name`;  // Sort members alphabetically for better UI
 
@@ -816,8 +816,8 @@ exports.getManageGroupPage = (req, res) => {
 
   const groupQuery = `
     SELECT s.student_id, s.first_name, s.last_name, s.mis_number
-    FROM Group_Members gm
-    JOIN Student s ON gm.student_id = s.student_id
+    FROM group_members gm
+    JOIN student s ON gm.student_id = s.student_id
     WHERE gm.group_id = ?
   `;
 
@@ -838,7 +838,7 @@ exports.searchStudentForGroup = (req, res) => {
 
   const searchQuery = `
     SELECT student_id, first_name, last_name, mis_number, group_id 
-    FROM Student 
+    FROM student 
     WHERE mis_number = ? OR email = ? OR contact_number = ?
   `;
 
@@ -849,8 +849,8 @@ exports.searchStudentForGroup = (req, res) => {
 
     const groupQuery = `
       SELECT s.student_id, s.first_name, s.last_name, s.mis_number
-      FROM Group_Members gm
-      JOIN Student s ON gm.student_id = s.student_id
+      FROM group_members gm
+      JOIN student s ON gm.student_id = s.student_id
       WHERE gm.group_id = ?
     `;
 
@@ -867,8 +867,8 @@ exports.searchStudentForGroup = (req, res) => {
 };
 
 function assignStudentToGroup(student_id, groupId, res) {
-  const addMemberQuery = `INSERT INTO Group_Members (group_id, student_id) VALUES (?, ?)`;
-  const updateStudentQuery = `UPDATE Student SET group_id = ?, status = 'allocated' WHERE student_id = ?`;
+  const addMemberQuery = `INSERT INTO group_members (group_id, student_id) VALUES (?, ?)`;
+  const updateStudentQuery = `UPDATE student SET group_id = ?, status = 'allocated' WHERE student_id = ?`;
 
   db.query(addMemberQuery, [groupId, student_id], (err) => {
     if (err) return res.status(500).send("Error adding to group.");
@@ -883,7 +883,7 @@ exports.addStudentToGroup = (req, res) => {
   const groupId = req.params.groupId;
   const { student_id } = req.body;
 
-  const checkQuery = `SELECT student_id, first_name, last_name, mis_number, group_id FROM Student WHERE student_id = ?`;
+  const checkQuery = `SELECT student_id, first_name, last_name, mis_number, group_id FROM student WHERE student_id = ?`;
 
   db.query(checkQuery, [student_id], (err, result) => {
     if (err) return res.status(500).send("Error checking student.");
@@ -908,7 +908,7 @@ exports.getConfirmAddPage = (req, res) => {
 
   const query = `
     SELECT student_id, first_name, last_name, mis_number, group_id
-    FROM Student
+    FROM student
     WHERE student_id = ?
   `;
 
@@ -929,7 +929,7 @@ exports.getConfirmAddPage = (req, res) => {
 exports.confirmAddStudentToNewGroup = (req, res) => {
   const { student_id, groupId, currentGroup } = req.body;
 
-  const removeQuery = `DELETE FROM Group_Members WHERE group_id = ? AND student_id = ?`;
+  const removeQuery = `DELETE FROM group_members WHERE group_id = ? AND student_id = ?`;
 
   db.query(removeQuery, [currentGroup, student_id], (err) => {
     if (err) return res.status(500).send("Error removing student from old group.");
@@ -943,8 +943,8 @@ exports.removeStudentFromGroup = (req, res) => {
   const groupId = req.params.groupId;
   const { student_id } = req.body;
 
-  const deleteQuery = `DELETE FROM Group_Members WHERE group_id = ? AND student_id = ?`;
-  const updateStudentQuery = `UPDATE Student SET group_id = NULL, status = 'pending' WHERE student_id = ?`;
+  const deleteQuery = `DELETE FROM group_members WHERE group_id = ? AND student_id = ?`;
+  const updateStudentQuery = `UPDATE student SET group_id = NULL, status = 'pending' WHERE student_id = ?`;
 
   db.query(deleteQuery, [groupId, student_id], (err) => {
     if (err) return res.status(500).send("Error removing student.");
@@ -960,11 +960,11 @@ exports.deleteGroup = (req, res) => {
 
   const disableSafeUpdates = `SET SQL_SAFE_UPDATES = 0`;
   const enableSafeUpdates = `SET SQL_SAFE_UPDATES = 1`;
-  const resetStudentsQuery = `UPDATE Student SET group_id = NULL, status = 'pending' WHERE group_id = ?`;
-  const deleteGroupMembers = `DELETE FROM Group_Members WHERE group_id = ?`;
-  const deleteGroupPreferences = `DELETE FROM Group_Faculty_Preferences WHERE group_id = ?`;
+  const resetStudentsQuery = `UPDATE student SET group_id = NULL, status = 'pending' WHERE group_id = ?`;
+  const deleteGroupMembers = `DELETE FROM group_members WHERE group_id = ?`;
+  const deleteGroupPreferences = `DELETE FROM group_faculty_preferences WHERE group_id = ?`;
   const deletePanelAssignments = `DELETE FROM panel_group_assignments WHERE group_id = ?`;
-  const deleteGroupQuery = `DELETE FROM \`Group\` WHERE group_id = ?`;
+  const deleteGroupQuery = `DELETE FROM \`group\` WHERE group_id = ?`;
 
   console.log("Starting group deletion process for group ID:", groupId);
 
@@ -1064,7 +1064,7 @@ exports.addLimit = async (req, res) => {
 
                   // Check for existing entry
                   const [existing] = await connection.query(
-                      'SELECT * FROM Faculty_Allocation_Limits WHERE degree = ? AND semester = ?',
+                      'SELECT * FROM faculty_allocation_limits WHERE degree = ? AND semester = ?',
                       [degree, semester]
                   );
 
@@ -1075,7 +1075,7 @@ exports.addLimit = async (req, res) => {
 
                   // Insert new limit
                   await connection.query(
-                      'INSERT INTO Faculty_Allocation_Limits (degree, semester, limit_count) VALUES (?, ?, ?)',
+                      'INSERT INTO faculty_allocation_limits (degree, semester, limit_count) VALUES (?, ?, ?)',
                       [degree, semester, allocation_limit]
                   );
               }
@@ -1100,14 +1100,14 @@ exports.viewLimits = (req, res) => {
     return res.status(401).json({ error: "Unauthorized access. Please log in as an admin." });
   }
 
-  db.query("SELECT * FROM Faculty_Allocation_Limits", (err, results) => {
+  db.query("SELECT * FROM faculty_allocation_limits", (err, results) => {
       if (err) {
           console.error("Error fetching limits:", err);
           return res.status(500).send("Database error");
       }
 
       // Get list of degrees for selection
-      db.query("SELECT DISTINCT degree FROM Student", (err, degrees) => {
+      db.query("SELECT DISTINCT degree FROM student", (err, degrees) => {
         if (err) {
             console.error("Error fetching degrees:", err);
             return res.status(500).send("Database error");
@@ -1139,7 +1139,7 @@ exports.deleteLimit = async (req, res) => {
 
   try {
       // Delete the limit using a promise-based query
-      await db.promise().query("DELETE FROM Faculty_Allocation_Limits WHERE limit_id = ?", [limitId]);
+      await db.promise().query("DELETE FROM faculty_allocation_limits WHERE limit_id = ?", [limitId]);
 
       // Redirect after successful deletion
       res.redirect("/admin/limits");
@@ -1163,31 +1163,31 @@ exports.renderPanelForm = (req, res) => {
     SELECT f.faculty_id, f.first_name, f.last_name, f.department,
       (
         SELECT COUNT(g.group_id)
-        FROM \`Group\` g
-        JOIN Student s ON g.leader_id = s.student_id
+        FROM \`group\` g
+        JOIN student s ON g.leader_id = s.student_id
         WHERE g.allocated_faculty_id = f.faculty_id
           AND s.degree = ?
           AND (? = -1 OR s.semester = ?)
       ) AS group_count,
       EXISTS (
-        SELECT 1 FROM Panel_Faculty_Members pf
-        JOIN Panel p ON pf.panel_id = p.panel_id
+        SELECT 1 FROM panel_faculty_members pf
+        JOIN panel p ON pf.panel_id = p.panel_id
         WHERE pf.faculty_id = f.faculty_id
           AND p.degree = ?
           AND p.semester = ?
       ) AS alreadyAssigned
-    FROM Faculty f
+    FROM faculty f
     ORDER BY f.department, group_count DESC
   `;
 
   const totalGroupsQuery = `
-    SELECT COUNT(*) AS total FROM \`Group\` g
-    JOIN Student s ON g.leader_id = s.student_id
+    SELECT COUNT(*) AS total FROM \`group\` g
+    JOIN student s ON g.leader_id = s.student_id
     WHERE s.degree = ? AND (? = -1 OR s.semester = ?)
   `;
 
   const existingPanelsQuery = `
-    SELECT COUNT(*) AS count FROM Panel
+    SELECT COUNT(*) AS count FROM panel
     WHERE degree = ? AND semester = ?
   `;
 
@@ -1240,7 +1240,7 @@ exports.createPanel = (req, res) => {
   console.log("Creating panel with degree:", degree, "semester:", semester, "facultyIds:", facultyIds);
 
   db.query(
-    `INSERT INTO Panel (degree, semester, max_groups) VALUES (?, ?, ?)`,
+    `INSERT INTO panel (degree, semester, max_groups) VALUES (?, ?, ?)`,
     [degree, semester, max_groups],
     (err, result) => {
       if (err) {
@@ -1254,9 +1254,9 @@ exports.createPanel = (req, res) => {
       let pendingFaculties = facultyIds.length;
 
       facultyIds.forEach(facultyId => {
-        // 1. Insert into Panel_Faculty_Members
+        // 1. Insert into panel_faculty_members
         db.query(
-          `INSERT INTO Panel_Faculty_Members (panel_id, faculty_id) VALUES (?, ?)`,
+          `INSERT INTO panel_faculty_members (panel_id, faculty_id) VALUES (?, ?)`,
           [panelId, facultyId],
           (err) => {
             if (err) {
@@ -1268,8 +1268,8 @@ exports.createPanel = (req, res) => {
             // 2. Find groups for this faculty
             const groupQuery = `
               SELECT g.group_id 
-              FROM \`Group\` g
-              JOIN Student s ON g.leader_id = s.student_id
+              FROM \`group\` g
+              JOIN student s ON g.leader_id = s.student_id
               WHERE g.allocated_faculty_id = ?
                 AND s.degree = ?
                 AND (? = -1 OR s.semester = ?)
@@ -1297,7 +1297,7 @@ exports.createPanel = (req, res) => {
 
               groups.forEach(group => {
                 db.query(
-                  `INSERT IGNORE INTO Panel_Group_Assignments (panel_id, group_id) VALUES (?, ?)`,
+                  `INSERT IGNORE INTO panel_group_assignments (panel_id, group_id) VALUES (?, ?)`,
                   [panelId, group.group_id],
                   (err) => {
                     if (err) console.error(`Error assigning group ${group.group_id} to panel:`, err);
@@ -1326,9 +1326,9 @@ exports.listPanels = (req, res) => {
     SELECT p.panel_id, p.degree, p.semester, p.max_groups,
            COUNT(DISTINCT pf.faculty_id) AS faculty_count,
            COUNT(DISTINCT pg.group_id) AS group_count
-    FROM Panel p
-    LEFT JOIN Panel_Faculty_Members pf ON p.panel_id = pf.panel_id
-    LEFT JOIN Panel_Group_Assignments pg ON p.panel_id = pg.panel_id
+    FROM panel p
+    LEFT JOIN panel_faculty_members pf ON p.panel_id = pf.panel_id
+    LEFT JOIN panel_group_assignments pg ON p.panel_id = pg.panel_id
     GROUP BY p.panel_id
     ORDER BY p.degree, p.semester
   `;
@@ -1345,7 +1345,7 @@ exports.listPanels = (req, res) => {
 exports.viewPanelDashboard = (req, res) => {
   const { panelId } = req.params;
 
-  db.query(`SELECT * FROM Panel WHERE panel_id = ?`, [panelId], (err, panelRows) => {
+  db.query(`SELECT * FROM panel WHERE panel_id = ?`, [panelId], (err, panelRows) => {
     if (err) {
       console.error("Error fetching panel:", err);
       return res.status(500).send('Error loading panel');
@@ -1362,8 +1362,8 @@ exports.viewPanelDashboard = (req, res) => {
 
     db.query(`
       SELECT f.faculty_id, f.first_name, f.last_name, f.department
-      FROM Panel_Faculty_Members pf
-      JOIN Faculty f ON pf.faculty_id = f.faculty_id
+      FROM panel_faculty_members pf
+      JOIN faculty f ON pf.faculty_id = f.faculty_id
       WHERE pf.panel_id = ?
     `, [panelId], (err, members) => {
       if (err) {
@@ -1373,9 +1373,9 @@ exports.viewPanelDashboard = (req, res) => {
 
       db.query(`
         SELECT g.group_id, g.project_title, f.first_name AS faculty_first_name, f.last_name AS faculty_last_name
-        FROM Panel_Group_Assignments pga
-        JOIN \`Group\` g ON pga.group_id = g.group_id
-        JOIN Faculty f ON g.allocated_faculty_id = f.faculty_id
+        FROM panel_group_assignments pga
+        JOIN \`group\` g ON pga.group_id = g.group_id
+        JOIN faculty f ON g.allocated_faculty_id = f.faculty_id
         WHERE pga.panel_id = ?
       `, [panelId], (err, groups) => {
         if (err) {
@@ -1386,12 +1386,12 @@ exports.viewPanelDashboard = (req, res) => {
         const unassignedGroupsQuery = `
           SELECT g.group_id, g.project_title,
                 f.first_name AS faculty_first_name, f.last_name AS faculty_last_name
-          FROM \`Group\` g
-          JOIN Student s ON g.leader_id = s.student_id
-          JOIN Faculty f ON g.allocated_faculty_id = f.faculty_id
+          FROM \`group\` g
+          JOIN student s ON g.leader_id = s.student_id
+          JOIN faculty f ON g.allocated_faculty_id = f.faculty_id
           WHERE s.degree = ? AND s.semester = ?
           AND g.group_id NOT IN (
-            SELECT group_id FROM Panel_Group_Assignments
+            SELECT group_id FROM panel_group_assignments
           )
         `;
 
@@ -1403,11 +1403,11 @@ exports.viewPanelDashboard = (req, res) => {
 
           const eligibleFacultyQuery = `
             SELECT faculty_id, first_name, last_name, department
-            FROM Faculty
+            FROM faculty
             WHERE faculty_id NOT IN (
               SELECT faculty_id
-              FROM Panel_Faculty_Members pf
-              JOIN Panel p ON pf.panel_id = p.panel_id
+              FROM panel_faculty_members pf
+              JOIN panel p ON pf.panel_id = p.panel_id
               WHERE p.degree = ? AND p.semester = ?
             )
           `;
@@ -1436,8 +1436,8 @@ exports.viewPanelDashboard = (req, res) => {
 exports.deletePanel = (req, res) => {
   const panelId = req.params.panelId;
 
-  // Step 1: Delete from Panel_Group_Assignments
-  const deleteGroupAssignmentsQuery = `DELETE FROM Panel_Group_Assignments WHERE panel_id = ?`;
+  // Step 1: Delete from panel_group_assignments
+  const deleteGroupAssignmentsQuery = `DELETE FROM panel_group_assignments WHERE panel_id = ?`;
 
   db.query(deleteGroupAssignmentsQuery, [panelId], (err) => {
     if (err) {
@@ -1445,8 +1445,8 @@ exports.deletePanel = (req, res) => {
       return res.status(500).send("Error deleting group assignments.");
     }
 
-    // Step 2: Delete from Panel_Faculty_Members
-    const deleteMembersQuery = `DELETE FROM Panel_Faculty_Members WHERE panel_id = ?`;
+    // Step 2: Delete from panel_faculty_members
+    const deleteMembersQuery = `DELETE FROM panel_faculty_members WHERE panel_id = ?`;
 
     db.query(deleteMembersQuery, [panelId], (err) => {
       if (err) {
@@ -1455,7 +1455,7 @@ exports.deletePanel = (req, res) => {
       }
 
       // Step 3: Delete the panel
-      const deletePanelQuery = `DELETE FROM Panel WHERE panel_id = ?`;
+      const deletePanelQuery = `DELETE FROM panel WHERE panel_id = ?`;
 
       db.query(deletePanelQuery, [panelId], (err) => {
         if (err) {
@@ -1488,16 +1488,16 @@ exports.autoGeneratePanels = (req, res) => {
     SELECT f.faculty_id, f.first_name, f.last_name, f.department,
       (
         SELECT COUNT(g.group_id)
-        FROM \`Group\` g
-        JOIN Student s ON g.leader_id = s.student_id
+        FROM \`group\` g
+        JOIN student s ON g.leader_id = s.student_id
         WHERE g.allocated_faculty_id = f.faculty_id
           AND s.degree = ?
           AND (? = -1 OR s.semester = ?)
       ) AS group_count
-    FROM Faculty f
+    FROM faculty f
     WHERE NOT EXISTS (
-      SELECT 1 FROM Panel_Faculty_Members pf
-      JOIN Panel p ON pf.panel_id = p.panel_id
+      SELECT 1 FROM panel_faculty_members pf
+      JOIN panel p ON pf.panel_id = p.panel_id
       WHERE pf.faculty_id = f.faculty_id
         AND p.degree = ?
         AND p.semester = ?
@@ -1507,8 +1507,8 @@ exports.autoGeneratePanels = (req, res) => {
 
   const groupQuery = `
     SELECT g.group_id, g.allocated_faculty_id
-    FROM \`Group\` g
-    JOIN Student s ON g.leader_id = s.student_id
+    FROM \`group\` g
+    JOIN student s ON g.leader_id = s.student_id
     WHERE s.degree = ? AND (? = -1 OR s.semester = ?)
   `;
 
@@ -1581,7 +1581,7 @@ exports.autoGeneratePanels = (req, res) => {
         console.log(`➡️ Processing Panel ${panelCounter} | Faculties: ${facultyIds.join(', ')} | Groups: ${assignedGroups.length}`);
 
         db.query(
-          `INSERT INTO Panel (degree, semester, max_groups) VALUES (?, ?, ?)`,
+          `INSERT INTO panel (degree, semester, max_groups) VALUES (?, ?, ?)`,
           [degree, semester, MAX_GROUPS_PER_PANEL],
           (err, result) => {
             if (err) {
@@ -1595,7 +1595,7 @@ exports.autoGeneratePanels = (req, res) => {
             // Add faculty members to panel
             facultyIds.forEach(fid => {
               db.query(
-                `INSERT INTO Panel_Faculty_Members (panel_id, faculty_id) VALUES (?, ?)`,
+                `INSERT INTO panel_faculty_members (panel_id, faculty_id) VALUES (?, ?)`,
                 [panelId, fid],
                 err => {
                   if (err) console.error(`❌ Error adding faculty ${fid} to panel ${panelId}:`, err);
@@ -1606,7 +1606,7 @@ exports.autoGeneratePanels = (req, res) => {
             // Add groups to panel
             assignedGroups.forEach(group => {
               db.query(
-                `INSERT INTO Panel_Group_Assignments (panel_id, group_id) VALUES (?, ?)`,
+                `INSERT INTO panel_group_assignments (panel_id, group_id) VALUES (?, ?)`,
                 [panelId, group.group_id],
                 err => {
                   if (err) console.error(`❌ Error assigning group ${group.group_id} to panel ${panelId}:`, err);
@@ -1631,7 +1631,7 @@ exports.addFacultyToPanel = (req, res) => {
   const { faculty_id } = req.body;
 
   db.query(`
-    INSERT INTO Panel_Faculty_Members (panel_id, faculty_id)
+    INSERT INTO panel_faculty_members (panel_id, faculty_id)
     VALUES (?, ?)
   `, [panelId, faculty_id], (err) => {
     if (err) {
@@ -1648,7 +1648,7 @@ exports.removeFacultyFromPanel = (req, res) => {
   const { faculty_id } = req.body;
 
   db.query(`
-    DELETE FROM Panel_Faculty_Members
+    DELETE FROM panel_faculty_members
     WHERE panel_id = ? AND faculty_id = ?
   `, [panelId, faculty_id], (err) => {
     if (err) {
@@ -1664,7 +1664,7 @@ exports.addGroupToPanel = (req, res) => {
   const panelId = req.params.panelId;
   const groupId = req.body.group_id;
 
-  const query = `INSERT INTO Panel_Group_Assignments (panel_id, group_id) VALUES (?, ?)`;
+  const query = `INSERT INTO panel_group_assignments (panel_id, group_id) VALUES (?, ?)`;
 
   db.query(query, [panelId, groupId], (err) => {
     if (err) {
@@ -1682,7 +1682,7 @@ exports.removeGroupFromPanel = (req, res) => {
   const panelId = req.params.panelId;
   const groupId = req.body.group_id;
 
-  const query = `DELETE FROM Panel_Group_Assignments WHERE panel_id = ? AND group_id = ?`;
+  const query = `DELETE FROM panel_group_assignments WHERE panel_id = ? AND group_id = ?`;
 
   db.query(query, [panelId, groupId], (err) => {
     if (err) {

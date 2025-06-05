@@ -35,7 +35,7 @@ exports.signupStudent = async (req, res, next) => {
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     // Status is 'Pending', group_id is NULL initially
-    const query = `INSERT INTO Student (first_name, last_name, mis_number, contact_number, email, password, degree, branch, semester, status, group_id)
+    const query = `INSERT INTO student (first_name, last_name, mis_number, contact_number, email, password, degree, branch, semester, status, group_id)
                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'Pending', NULL)`;
     const values = [
       first_name, last_name, mis_number, contact_number, email,
@@ -74,7 +74,7 @@ exports.loginStudent = async (req, res, next) => {
   }
 
   try {
-    const query = `SELECT * FROM Student WHERE email = ?`;
+    const query = `SELECT * FROM student WHERE email = ?`;
 
     db.query(query, [email], async (err, result) => {
       if (err) {
@@ -165,8 +165,8 @@ exports.getStudentHomepage = (req, res, next) => {
     SELECT s.student_id, s.first_name, s.last_name, s.mis_number, s.email, s.degree, s.branch, s.semester,
            s.group_id,
            g.project_title, g.status AS group_status, g.allocated_faculty_id
-    FROM Student s
-    LEFT JOIN \`Group\` g ON g.group_id = s.group_id
+    FROM student s
+    LEFT JOIN \`group\` g ON g.group_id = s.group_id
     WHERE s.student_id = ?
   `;
 
@@ -207,7 +207,7 @@ exports.checkGroupStatus = (req, res, next) => {
     return res.redirect('/student/login');
   }
 
-  const verifyStudentGroupQuery = `SELECT group_id FROM Student WHERE student_id = ?`;
+  const verifyStudentGroupQuery = `SELECT group_id FROM student WHERE student_id = ?`;
   db.query(verifyStudentGroupQuery, [sessionStudentId], (verifyErr, verifyResult) => {
     if (verifyErr || verifyResult.length === 0) {
       console.error("[GroupStatus Check] Error verifying student's group or student not found:", verifyErr);
@@ -223,7 +223,7 @@ exports.checkGroupStatus = (req, res, next) => {
       return res.redirect(`/student/${paramStudentId}/homepage`);
     }
 
-    const groupStatusQuery = `SELECT allocated_faculty_id, status FROM \`Group\` WHERE group_id = ?`;
+    const groupStatusQuery = `SELECT allocated_faculty_id, status FROM \`group\` WHERE group_id = ?`;
     console.log("[GroupStatus Check] Executing query:", groupStatusQuery, "with groupId:", urlGroupId);
 
     db.query(groupStatusQuery, [urlGroupId], (err, result) => {
@@ -277,8 +277,8 @@ exports.handleStudentGroupRedirection = (req, res) => {
   const groupQuery = `
     SELECT g.group_id, g.project_title, g.project_domain, g.allocated_faculty_id, 
            f.first_name AS faculty_first_name, f.last_name AS faculty_last_name
-    FROM \`Group\` g
-    LEFT JOIN Faculty f ON g.allocated_faculty_id = f.faculty_id
+    FROM \`group\` g
+    LEFT JOIN faculty f ON g.allocated_faculty_id = f.faculty_id
     WHERE g.group_id = ?
   `;
 
@@ -295,7 +295,7 @@ exports.handleStudentGroupRedirection = (req, res) => {
 
     const group = groupResult[0];
 
-    const studentQuery = `SELECT * FROM Student WHERE student_id = ?`;
+    const studentQuery = `SELECT * FROM student WHERE student_id = ?`;
 
     db.query(studentQuery, [paramStudentId], (err, studentResult) => {
       if (err) {
@@ -341,7 +341,7 @@ exports.getFacultyList = (req, res) => {
     return res.status(403).send("Unauthorized access to student group dashboard.");
   }
 
-  const query = "SELECT faculty_id, first_name, last_name FROM Faculty";
+  const query = "SELECT faculty_id, first_name, last_name FROM faculty";
   db.query(query, (err, faculties) => {
     if (err) {
       console.error("Error fetching faculty list:", err);
@@ -392,7 +392,7 @@ exports.submitGroupForm = async (req, res) => {
     console.log("✅ Unique MIS Numbers:", misNumbers);
 
     const [students] = await connection.query(
-      `SELECT * FROM Student WHERE mis_number IN (?)`,
+      `SELECT * FROM student WHERE mis_number IN (?)`,
       [misNumbers]
     );
 
@@ -420,7 +420,7 @@ exports.submitGroupForm = async (req, res) => {
     console.log("👨‍💼 Leader Student ID:", leaderId);
 
     const [groupResult] = await connection.query(
-      `INSERT INTO \`Group\` (leader_id, project_title, project_domain, status, current_faculty_id) VALUES (?, ?, ?, ?, ?)`,
+      `INSERT INTO \`group\` (leader_id, project_title, project_domain, status, current_faculty_id) VALUES (?, ?, ?, ?, ?)`,
       [leaderId, projectTitle, projectDomain, "Pending", preferences[0]]
     );
 
@@ -429,11 +429,11 @@ exports.submitGroupForm = async (req, res) => {
 
     for (const student of students) {
       await connection.query(
-        `INSERT INTO Group_Members (group_id, student_id) VALUES (?, ?)`,
+        `INSERT INTO group_members (group_id, student_id) VALUES (?, ?)`,
         [groupId, student.student_id]
       );
       await connection.query(
-        `UPDATE Student SET group_id = ? WHERE student_id = ?`,
+        `UPDATE student SET group_id = ? WHERE student_id = ?`,
         [groupId.toString(), student.student_id]
       );
       console.log(`👤 Added student ${student.first_name} (${student.mis_number}) to group ${groupId}`);
@@ -441,7 +441,7 @@ exports.submitGroupForm = async (req, res) => {
 
     for (let i = 0; i < preferences.length; i++) {
       await connection.query(
-        `INSERT INTO Group_Faculty_Preferences (group_id, faculty_id, preference_order) VALUES (?, ?, ?)`,
+        `INSERT INTO group_faculty_preferences (group_id, faculty_id, preference_order) VALUES (?, ?, ?)`,
         [groupId, preferences[i], i + 1]
       );
       console.log(`📌 Inserted preference ${i + 1} with Faculty ID: ${preferences[i]}`);
@@ -479,7 +479,7 @@ exports.studentDashboard = (req, res, next) => {
    }
 
   // Verify student belongs to this group (redundant with checkGroupStatus, but good practice here)
-   const verifyStudentGroupQuery = `SELECT group_id FROM Student WHERE student_id = ?`;
+   const verifyStudentGroupQuery = `SELECT group_id FROM student WHERE student_id = ?`;
    db.query(verifyStudentGroupQuery, [sessionStudentId], (verifyErr, verifyResult) => {
       if (verifyErr || verifyResult.length === 0) {
           return next({ status: 500, message: "Error verifying group membership." });
@@ -503,13 +503,13 @@ exports.studentDashboard = (req, res, next) => {
                 s.degree,
                 s.branch,
                 s.semester
-            FROM \`Group\` g
-            LEFT JOIN Faculty f ON g.allocated_faculty_id = f.faculty_id
-            INNER JOIN Student s ON s.student_id = ? -- Fetch details for THIS student
+            FROM \`group\` g
+            LEFT JOIN faculty f ON g.allocated_faculty_id = f.faculty_id
+            INNER JOIN student s ON s.student_id = ? -- Fetch details for THIS student
             WHERE g.group_id = ?
               AND g.status = 'Allocated' -- Ensure group is actually allocated
               AND g.allocated_faculty_id IS NOT NULL; -- Ensure faculty assigned (matches redirect logic)
-              -- No need for Group_Members join if checking student.group_id
+              -- No need for group_members join if checking student.group_id
               `;
 
       db.query(dashboardQuery, [sessionStudentId, urlGroupId], (err, results) => {
@@ -523,7 +523,7 @@ exports.studentDashboard = (req, res, next) => {
            // OR means the group isn't allocated - redirect back based on checkGroupStatus's logic
            console.warn(`[Render Dashboard] No *allocated* group data found for Group ${urlGroupId} / Student ${sessionStudentId}. Redirecting based on status.`);
             // Re-check status to be safe
-            const groupStatusQuery = `SELECT allocated_faculty_id FROM \`Group\` WHERE group_id = ?`;
+            const groupStatusQuery = `SELECT allocated_faculty_id FROM \`group\` WHERE group_id = ?`;
              db.query(groupStatusQuery, [urlGroupId], (statusErr, statusResult) => {
                  if (statusErr || statusResult.length === 0){
                      req.flash('error', 'Could not find your assigned group.');
@@ -584,7 +584,7 @@ exports.getProfile = (req, res, next) => {
     });
   }
 
-  const query = `SELECT * FROM Student WHERE student_id = ?`;
+  const query = `SELECT * FROM student WHERE student_id = ?`;
   console.log("[Profile] Executing query:", query, "with ID:", paramStudentId);
 
   db.query(query, [paramStudentId], (err, result) => {
@@ -620,7 +620,7 @@ exports.getEditProfile = (req, res, next) => {
     return res.status(403).render("shared/error", { message: "Unauthorized access to edit profile." });
   }
 
-  const query = `SELECT * FROM Student WHERE student_id = ?`;
+  const query = `SELECT * FROM student WHERE student_id = ?`;
   console.log("[Edit Profile - GET] Executing query:", query);
 
   db.query(query, [paramStudentId], (err, result) => {
@@ -658,7 +658,7 @@ exports.postEditProfile = (req, res, next) => {
   console.log("[Edit Profile - POST] Received data:", { first_name, last_name, contact_number });
 
   const updateQuery = `
-    UPDATE Student 
+    UPDATE student 
     SET first_name = ?, last_name = ?, contact_number = ?
     WHERE student_id = ?
   `;
@@ -718,7 +718,7 @@ exports.postChangePassword = (req, res, next) => {
     });
   }
 
-  const getQuery = `SELECT password FROM Student WHERE student_id = ?`;
+  const getQuery = `SELECT password FROM student WHERE student_id = ?`;
   console.log("[Change Password - POST] Executing password fetch query:", getQuery);
 
   db.query(getQuery, [paramStudentId], async (err, result) => {
@@ -743,7 +743,7 @@ exports.postChangePassword = (req, res, next) => {
     }
 
     const hashedNewPassword = await bcrypt.hash(newPassword, 10);
-    const updateQuery = `UPDATE Student SET password = ? WHERE student_id = ?`;
+    const updateQuery = `UPDATE student SET password = ? WHERE student_id = ?`;
     console.log("[Change Password - POST] Executing update query:", updateQuery);
 
     db.query(updateQuery, [hashedNewPassword, paramStudentId], (err) => {

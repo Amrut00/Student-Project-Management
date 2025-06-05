@@ -48,7 +48,7 @@ exports.loginStaff = async (req, res, next) => { // Added next for error handlin
   }
 
   try {
-      const query = "SELECT * FROM Staff WHERE email = ?";
+      const query = "SELECT * FROM staff WHERE email = ?";
       // Using promise() interface simplifies async/await here
       const [results] = await db.promise().query(query, [email]);
 
@@ -110,7 +110,7 @@ exports.loginStaff = async (req, res, next) => { // Added next for error handlin
 exports.viewProfile = (req, res) => {
   const { staffId } = req.params;
 
-  const query = "SELECT * FROM Staff WHERE staff_id = ?";
+  const query = "SELECT * FROM staff WHERE staff_id = ?";
   db.query(query, [staffId], (err, result) => {
     if (err) {
       console.error("Error fetching staff profile:", err);
@@ -131,7 +131,7 @@ exports.viewProfile = (req, res) => {
 exports.editProfile = (req, res) => {
   const { staffId } = req.params;
 
-  const query = "SELECT * FROM Staff WHERE staff_id = ?";
+  const query = "SELECT * FROM staff WHERE staff_id = ?";
   db.query(query, [staffId], (err, result) => {
     if (err) {
       console.error("Error fetching staff:", err);
@@ -154,7 +154,7 @@ exports.updateProfile = (req, res) => {
   const { first_name, last_name, contact_number, email } = req.body;
 
   const query = `
-    UPDATE Staff
+    UPDATE staff
     SET first_name = ?, last_name = ?, contact_number = ?, email = ?
     WHERE staff_id = ?
   `;
@@ -183,7 +183,7 @@ exports.updatePassword = async (req, res) => {
     return res.send(`<script>alert("New passwords do not match."); window.history.back();</script>`);
   }
 
-  const query = "SELECT password FROM Staff WHERE staff_id = ?";
+  const query = "SELECT password FROM staff WHERE staff_id = ?";
   db.query(query, [staffId], async (err, results) => {
     if (err || results.length === 0) {
       return res.send(`<script>alert("Something went wrong."); window.history.back();</script>`);
@@ -195,7 +195,7 @@ exports.updatePassword = async (req, res) => {
     }
 
     const hashed = await bcrypt.hash(new_password, 10);
-    const updateQuery = "UPDATE Staff SET password = ? WHERE staff_id = ?";
+    const updateQuery = "UPDATE staff SET password = ? WHERE staff_id = ?";
     db.query(updateQuery, [hashed, staffId], (err2) => {
       if (err2) {
         return res.send(`<script>alert("Error updating password."); window.history.back();</script>`);
@@ -219,9 +219,9 @@ exports.getAssignedGroups = (req, res) => {
       SELECT g.group_id, g.project_title, g.project_domain,
              GROUP_CONCAT(DISTINCT CONCAT(s.first_name, ' ', s.last_name) ORDER BY s.first_name SEPARATOR ', ') AS members
              -- Removed student details like degree/semester unless needed on this overview page
-      FROM \`Group\` g
-      LEFT JOIN Group_Members gm ON g.group_id = gm.group_id
-      LEFT JOIN Student s ON gm.student_id = s.student_id
+      FROM \`group\` g
+      LEFT JOIN group_members gm ON g.group_id = gm.group_id
+      LEFT JOIN student s ON gm.student_id = s.student_id
       WHERE g.assisting_staff_id = ? AND g.status = 'Allocated' -- Only show allocated groups
       GROUP BY g.group_id, g.project_title, g.project_domain
       ORDER BY g.group_id
@@ -256,10 +256,10 @@ exports.getGroupDetailsForStaff = (req, res) => {
       SELECT g.project_title, g.project_domain,
              f.first_name AS faculty_first_name, f.last_name AS faculty_last_name,
              GROUP_CONCAT(DISTINCT CONCAT(s.first_name, ' ', s.last_name) ORDER BY s.first_name SEPARATOR ', ') AS members
-      FROM \`Group\` g
-      LEFT JOIN Faculty f ON g.allocated_faculty_id = f.faculty_id
-      LEFT JOIN Group_Members gm ON g.group_id = gm.group_id
-      LEFT JOIN Student s ON gm.student_id = s.student_id
+      FROM \`group\` g
+      LEFT JOIN faculty f ON g.allocated_faculty_id = f.faculty_id
+      LEFT JOIN group_members gm ON g.group_id = gm.group_id
+      LEFT JOIN student s ON gm.student_id = s.student_id
       WHERE g.group_id = ? AND g.assisting_staff_id = ?
       GROUP BY g.group_id, g.project_title, g.project_domain, f.first_name, f.last_name;
   `;

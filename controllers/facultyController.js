@@ -13,7 +13,7 @@ exports.loginFaculty = async (req, res, next) => { // Added next
   }
 
   try {
-    const query = "SELECT * FROM Faculty WHERE email = ?";
+    const query = "SELECT * FROM faculty WHERE email = ?";
     // Using promise() for consistency
     const [result] = await db.promise().query(query, [email]);
 
@@ -94,16 +94,16 @@ exports.getExistingGroups = async (req, res) => {
              COALESCE(g.project_domain, 'Not Assigned') AS project_domain,  
              GROUP_CONCAT(CONCAT(s.first_name, ' ', s.last_name) SEPARATOR ', ') AS members,
              leader.degree, leader.semester
-      FROM \`Group\` g
-      LEFT JOIN Group_Members gm ON g.group_id = gm.group_id
-      LEFT JOIN Student s ON gm.student_id = s.student_id
-      LEFT JOIN Student leader ON g.leader_id = leader.student_id
+      FROM \`group\` g
+      LEFT JOIN group_members gm ON g.group_id = gm.group_id
+      LEFT JOIN student s ON gm.student_id = s.student_id
+      LEFT JOIN student leader ON g.leader_id = leader.student_id
       WHERE g.allocated_faculty_id = ? AND g.status = 'Allocated'
       GROUP BY g.group_id, g.project_title, g.project_domain, leader.degree, leader.semester
       ORDER BY leader.degree, leader.semester, g.group_id`;
   
     // Query to fetch allocation limits
-    const limitsQuery = `SELECT degree, semester, limit_count FROM Faculty_Allocation_Limits`;
+    const limitsQuery = `SELECT degree, semester, limit_count FROM faculty_allocation_limits`;
   
     try {
       const [groupsResults, limitsResults] = await Promise.all([
@@ -212,23 +212,23 @@ exports.getUnallocatedGroups = async (req, res) => {
                  s_leader.degree, s_leader.semester,
                  CONCAT(s_leader.first_name, ' ', s_leader.last_name) AS leader_name,
                  GROUP_CONCAT(CONCAT(s.first_name, ' ', s.last_name) SEPARATOR ', ') AS members
-          FROM \`Group\` g
-          JOIN Student s_leader ON g.leader_id = s_leader.student_id
-          JOIN Group_Members gm ON g.group_id = gm.group_id
-          JOIN Student s ON gm.student_id = s.student_id
+          FROM \`group\` g
+          JOIN student s_leader ON g.leader_id = s_leader.student_id
+          JOIN group_members gm ON g.group_id = gm.group_id
+          JOIN student s ON gm.student_id = s.student_id
           WHERE g.current_faculty_id = ? AND g.status = 'Pending'
           GROUP BY g.group_id, s_leader.degree, s_leader.semester, s_leader.first_name, s_leader.last_name`;
   
       // ✅ Query to fetch already allocated group counts
       const allocatedQuery = `
           SELECT s.degree, s.semester, COUNT(*) AS allocated_count
-          FROM \`Group\` g
-          JOIN Student s ON g.leader_id = s.student_id
+          FROM \`group\` g
+          JOIN student s ON g.leader_id = s.student_id
           WHERE g.allocated_faculty_id = ?
           GROUP BY s.degree, s.semester`;
   
       // ✅ Query to fetch allocation limits
-      const limitsQuery = `SELECT degree, semester, limit_count FROM Faculty_Allocation_Limits`;
+      const limitsQuery = `SELECT degree, semester, limit_count FROM faculty_allocation_limits`;
   
       // Execute queries concurrently
       const [groupResults, allocatedResults, limitsResults] = await Promise.all([
@@ -309,7 +309,7 @@ exports.getFacultyProfile = (req, res) => {
       return res.status(403).send("Unauthorized");
     }
   
-    const query = "SELECT * FROM Faculty WHERE faculty_id = ?";
+    const query = "SELECT * FROM faculty WHERE faculty_id = ?";
     db.query(query, [facultyId], (err, results) => {
       if (err) return res.status(500).send("Database error");
       if (results.length === 0) return res.status(404).send("Faculty not found");
@@ -330,7 +330,7 @@ exports.getEditFacultyProfile = (req, res) => {
       return res.status(403).send("Unauthorized");
     }
   
-    db.query("SELECT * FROM Faculty WHERE faculty_id = ?", [facultyId], (err, result) => {
+    db.query("SELECT * FROM faculty WHERE faculty_id = ?", [facultyId], (err, result) => {
       if (err) return res.status(500).send("Database error");
       if (result.length === 0) return res.status(404).send("Faculty not found");
   
@@ -351,7 +351,7 @@ exports.postEditFacultyProfile = (req, res) => {
     const { first_name, last_name, phone_number, department, specialization } = req.body;
   
     const query = `
-      UPDATE Faculty SET first_name = ?, last_name = ?, phone_number = ?, department = ?, specialization = ?
+      UPDATE faculty SET first_name = ?, last_name = ?, phone_number = ?, department = ?, specialization = ?
       WHERE faculty_id = ?
     `;
   
@@ -384,7 +384,7 @@ exports.postChangeFacultyPassword = async (req, res) => {
   
     const { old_password, new_password, confirm_password } = req.body;
   
-    db.query("SELECT password FROM Faculty WHERE faculty_id = ?", [facultyId], async (err, results) => {
+    db.query("SELECT password FROM faculty WHERE faculty_id = ?", [facultyId], async (err, results) => {
       if (err) return res.status(500).send("Database error");
   
       const currentHash = results[0]?.password;
@@ -401,7 +401,7 @@ exports.postChangeFacultyPassword = async (req, res) => {
       }
   
       const newHash = await bcrypt.hash(new_password, 10);
-      db.query("UPDATE Faculty SET password = ? WHERE faculty_id = ?", [newHash, facultyId], (err) => {
+      db.query("UPDATE faculty SET password = ? WHERE faculty_id = ?", [newHash, facultyId], (err) => {
         if (err) return res.status(500).send("Database error");
         return res.redirect(`/faculty/${facultyId}/profile?alert=Password changed successfully`);
       });
@@ -427,8 +427,8 @@ exports.chooseGroup = (req, res) => {
         // Step 1: Get group's degree & semester
         connection.query(
           `SELECT s_leader.degree, s_leader.semester 
-           FROM \`Group\` g
-           JOIN Student s_leader ON g.leader_id = s_leader.student_id
+           FROM \`group\` g
+           JOIN student s_leader ON g.leader_id = s_leader.student_id
            WHERE g.group_id = ?`,
           [groupId],
           (err, groupResult) => {
@@ -446,7 +446,7 @@ exports.chooseGroup = (req, res) => {
             console.log(`🔍 Fetching global allocation limits...`);
             connection.query(
               `SELECT degree, semester, limit_count 
-               FROM Faculty_Allocation_Limits`,
+               FROM faculty_allocation_limits`,
               (err, limitResults) => {
                 if (err) {
                   console.error("❌ Error fetching allocation limits:", err);
@@ -486,8 +486,8 @@ exports.chooseGroup = (req, res) => {
                 console.log(`🔍 Counting currently allocated groups for Faculty ID: ${facultyId}`);
                 connection.query(
                   `SELECT COUNT(*) AS allocatedCount
-                   FROM \`Group\` g
-                   JOIN Student s_leader ON g.leader_id = s_leader.student_id
+                   FROM \`group\` g
+                   JOIN student s_leader ON g.leader_id = s_leader.student_id
                    WHERE g.allocated_faculty_id = ? 
                    AND (s_leader.degree = ? OR 'All Degrees' = ?) 
                    AND (s_leader.semester = ? OR -1 = ?);`,
@@ -512,7 +512,7 @@ exports.chooseGroup = (req, res) => {
   
                     // Step 5: Allocate the group
                     connection.query(
-                      `UPDATE \`Group\` 
+                      `UPDATE \`group\` 
                        SET allocated_faculty_id = ?, current_faculty_id = NULL, status = "Allocated" 
                        WHERE group_id = ?`,
                       [facultyId, groupId],
@@ -527,10 +527,10 @@ exports.chooseGroup = (req, res) => {
   
                         // Step 5.5: Update status of students in the group
                         connection.query(
-                          `UPDATE Student 
+                          `UPDATE student 
                           SET status = 'Allocated' 
                           WHERE student_id IN (
-                            SELECT student_id FROM Group_Members WHERE group_id = ?
+                            SELECT student_id FROM group_members WHERE group_id = ?
                           )`,
                           [groupId],
                           (err) => {
@@ -581,7 +581,7 @@ exports.passGroup = (req, res) => {
       console.log(`Processing pass request for group ${groupId} by faculty ${facultyId}`);
   
       connection.query(
-        `SELECT faculty_id FROM Group_Faculty_Preferences 
+        `SELECT faculty_id FROM group_faculty_preferences 
          WHERE group_id = ? ORDER BY preference_order`,
         [groupId],
         (err, preferences) => {
@@ -607,7 +607,7 @@ exports.passGroup = (req, res) => {
             console.log(`Passing group ${groupId} to next preferred faculty ${nextFaculty.faculty_id}`);
   
             connection.query(
-              `UPDATE \`Group\` SET current_faculty_id = ? WHERE group_id = ?`,
+              `UPDATE \`group\` SET current_faculty_id = ? WHERE group_id = ?`,
               [nextFaculty.faculty_id, groupId],
               (err) => {
                 connection.release();
@@ -623,8 +623,8 @@ exports.passGroup = (req, res) => {
   
             connection.query(
               `SELECT s.degree, s.semester 
-               FROM \`Group\` g
-               JOIN Student s ON g.leader_id = s.student_id
+               FROM \`group\` g
+               JOIN student s ON g.leader_id = s.student_id
                WHERE g.group_id = ?`,
               [groupId],
               (err, groupResult) => {
@@ -639,7 +639,7 @@ exports.passGroup = (req, res) => {
   
                 // **NEW STEP: Fetch faculty allocation limits dynamically**
                 connection.query(
-                  `SELECT limit_count FROM Faculty_Allocation_Limits 
+                  `SELECT limit_count FROM faculty_allocation_limits 
                    WHERE (degree = ? OR degree = "All Degrees") 
                    AND (semester = ? OR semester = -1) 
                    ORDER BY (degree = "All Degrees") ASC, (semester = -1) ASC 
@@ -657,10 +657,10 @@ exports.passGroup = (req, res) => {
   
                     connection.query(
                       `SELECT f.faculty_id 
-                       FROM Faculty f
+                       FROM faculty f
                        LEFT JOIN (
                          SELECT allocated_faculty_id, COUNT(*) AS allocatedCount
-                         FROM \`Group\`
+                         FROM \`group\`
                          WHERE allocated_faculty_id IS NOT NULL
                          GROUP BY allocated_faculty_id
                        ) g_count ON f.faculty_id = g_count.allocated_faculty_id
@@ -686,7 +686,7 @@ exports.passGroup = (req, res) => {
                           }
   
                           connection.query(
-                            `UPDATE \`Group\` 
+                            `UPDATE \`group\` 
                              SET allocated_faculty_id = ?, current_faculty_id = NULL, status = "Allocated" 
                              WHERE group_id = ?`,
                             [randomFacultyId, groupId],
@@ -702,14 +702,14 @@ exports.passGroup = (req, res) => {
                               console.log(`Group ${groupId} successfully allocated to faculty ${randomFacultyId}`);
   
                               connection.query(
-                                `UPDATE Student 
+                                `UPDATE student 
                                  SET status = "Allocated" 
                                  WHERE student_id IN (
-                                   SELECT student_id FROM Group_Members WHERE group_id = ?
+                                   SELECT student_id FROM group_members WHERE group_id = ?
                                  ) 
                                  AND NOT EXISTS (
-                                   SELECT 1 FROM \`Group\` g 
-                                   JOIN Group_Members gm ON g.group_id = gm.group_id 
+                                   SELECT 1 FROM \`group\` g 
+                                   JOIN group_members gm ON g.group_id = gm.group_id 
                                    WHERE gm.student_id = Student.student_id 
                                    AND g.status = 'Pending'
                                  )`,
@@ -769,7 +769,7 @@ exports.getStaffList = (req, res) => {
       return res.status(403).send("Unauthorized access to staff list");
     }
   
-    const query = "SELECT staff_id, first_name, last_name FROM Staff";
+    const query = "SELECT staff_id, first_name, last_name FROM staff";
     db.query(query, (err, results) => {
       if (err) {
         console.error("Database error:", err);
@@ -810,12 +810,12 @@ exports.getStaffList = (req, res) => {
       SELECT g.project_title, g.project_domain,
              f.first_name AS faculty_first_name, f.last_name AS faculty_last_name,
              GROUP_CONCAT(DISTINCT CONCAT(s.first_name, ' ', s.last_name) ORDER BY s.first_name SEPARATOR ', ') AS members
-      FROM \`Group\` g
+      FROM \`group\` g
       -- Make Faculty LEFT JOIN in case allocated_faculty_id is somehow null but shouldn't be here
-      LEFT JOIN Faculty f ON g.allocated_faculty_id = f.faculty_id
+      LEFT JOIN faculty f ON g.allocated_faculty_id = f.faculty_id
       -- LEFT JOIN Members to handle groups with potentially no members yet assigned
-      LEFT JOIN Group_Members gm ON g.group_id = gm.group_id
-      LEFT JOIN Student s ON gm.student_id = s.student_id
+      LEFT JOIN group_members gm ON g.group_id = gm.group_id
+      LEFT JOIN student s ON gm.student_id = s.student_id
       WHERE g.group_id = ? AND g.allocated_faculty_id = ? -- Verify faculty assignment again
       GROUP BY g.group_id, g.project_title, g.project_domain, f.first_name, f.last_name;
     `;
@@ -837,7 +837,7 @@ exports.getStaffList = (req, res) => {
         const membersList = group.members ? group.members.split(", ") : []; // Handle null members safely
 
         // Fetch staff list for the dropdown (async operation needed)
-        db.query("SELECT staff_id, first_name, last_name FROM Staff", (staffErr, staffResults) => {
+        db.query("SELECT staff_id, first_name, last_name FROM staff", (staffErr, staffResults) => {
             if (staffErr) {
                 console.error("Error fetching staff list:", staffErr);
                 req.flash('error', 'Could not load staff list for assignment.');
@@ -897,7 +897,7 @@ exports.assignGroupToStaff = (req, res) => {
           return res.status(500).send("Transaction error");
         }
   
-        const updateGroupQuery = "UPDATE `Group` SET assisting_staff_id = ? WHERE group_id = ?";
+        const updateGroupQuery = "UPDATE `group` SET assisting_staff_id = ? WHERE group_id = ?";
         connection.query(updateGroupQuery, [staffId, groupId], (err) => {
           if (err) {
             return connection.rollback(() => {
@@ -908,13 +908,13 @@ exports.assignGroupToStaff = (req, res) => {
           }
   
           const updateStudentQuery = `
-            UPDATE Student 
+            UPDATE student 
             SET group_id = 
               CASE 
                 WHEN FIND_IN_SET(?, group_id) = 0 THEN CONCAT(group_id, ',', ?) 
                 ELSE group_id
               END
-            WHERE student_id IN (SELECT student_id FROM Group_Members WHERE group_id = ?)
+            WHERE student_id IN (SELECT student_id FROM group_members WHERE group_id = ?)
           `;
   
           connection.query(updateStudentQuery, [groupId, groupId, groupId], (err) => {
