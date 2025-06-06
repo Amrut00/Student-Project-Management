@@ -93,8 +93,6 @@ A comprehensive web-based platform developed to manage academic projects across 
 
 ## 🖼️ Screenshots
 
-> 📸 Add screenshots in the following placeholders
-
 - Student Dashboard  
   ![Student Dashboard](./screenshots/student_dashboard.png)
 
