@@ -24,7 +24,7 @@ module.exports = (io, db) => {
         } else if (session.staff) {
              userDetails.type = 'staff';
              userDetails.id = session.staff.staff_id; // Ensure this path matches your session structure
-             userDetails.name = `${session.staff.first_name || ''} ${session.staff.last_name || ''} (Staff)`.trim(); // Added "(Staff)" suffix
+             userDetails.name = `${session.staff.first_name || ''} ${session.staff.last_name || ''} (staff)`.trim(); // Added "(Staff)" suffix
         } else {
             // Should not be reached if the initial check works, but acts as a safeguard
             return null;

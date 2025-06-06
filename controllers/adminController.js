@@ -488,7 +488,7 @@ exports.updateUser = (req, res) => {
   }
   // Update faculty details
   else if (userType === "faculty") {
-      query = `UPDATE Faculty SET first_name = ?, last_name = ?, email = ?, phone_number = ?, department = ?, specialization = ?, availability_status = ? WHERE faculty_id = ?`;
+      query = `UPDATE faculty SET first_name = ?, last_name = ?, email = ?, phone_number = ?, department = ?, specialization = ?, availability_status = ? WHERE faculty_id = ?`;
       params = [
           userData.first_name,
           userData.last_name,
@@ -559,9 +559,9 @@ exports.updatePassword = (req, res) => {
   }
 
   const tableMap = {
-    student: "Student",
-    faculty: "Faculty",
-    staff: "Staff"
+    student: "student",
+    faculty: "faculty",
+    staff: "staff"
   };
 
   const table = tableMap[type];
@@ -767,7 +767,7 @@ exports.getGroupDetails = (req, res) => {
              COALESCE(s.semester, 'Unknown') AS semester
       FROM \`group\` g
       LEFT JOIN faculty f ON g.allocated_faculty_id = f.faculty_id
-      LEFT JOIN Staff st ON g.assisting_staff_id = st.staff_id
+      LEFT JOIN staff st ON g.assisting_staff_id = st.staff_id
       LEFT JOIN student s ON g.leader_id = s.student_id
       WHERE g.group_id = ?`;
 

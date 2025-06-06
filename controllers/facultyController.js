@@ -710,7 +710,7 @@ exports.passGroup = (req, res) => {
                                  AND NOT EXISTS (
                                    SELECT 1 FROM \`group\` g 
                                    JOIN group_members gm ON g.group_id = gm.group_id 
-                                   WHERE gm.student_id = Student.student_id 
+                                   WHERE gm.student_id = student.student_id 
                                    AND g.status = 'Pending'
                                  )`,
                                 [groupId],
@@ -811,7 +811,7 @@ exports.getStaffList = (req, res) => {
              f.first_name AS faculty_first_name, f.last_name AS faculty_last_name,
              GROUP_CONCAT(DISTINCT CONCAT(s.first_name, ' ', s.last_name) ORDER BY s.first_name SEPARATOR ', ') AS members
       FROM \`group\` g
-      -- Make Faculty LEFT JOIN in case allocated_faculty_id is somehow null but shouldn't be here
+      -- Make faculty LEFT JOIN in case allocated_faculty_id is somehow null but shouldn't be here
       LEFT JOIN faculty f ON g.allocated_faculty_id = f.faculty_id
       -- LEFT JOIN Members to handle groups with potentially no members yet assigned
       LEFT JOIN group_members gm ON g.group_id = gm.group_id

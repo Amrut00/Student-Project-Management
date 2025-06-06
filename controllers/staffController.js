@@ -27,7 +27,7 @@ exports.signupStaff = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         await db.execute(
-            "INSERT INTO Staff (first_name, last_name, mis_number, contact_number, email, assisting_faculty_id, password) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            "INSERT INTO staff (first_name, last_name, mis_number, contact_number, email, assisting_faculty_id, password) VALUES (?, ?, ?, ?, ?, ?, ?)",
             [first_name, last_name, mis_number, contact_number, email, assisting_faculty_id, hashedPassword]
         );
 
