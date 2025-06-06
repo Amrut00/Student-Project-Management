@@ -51,7 +51,7 @@ module.exports = (io, db) => {
         switch (user.type) {
             case 'student':
                 // Student needs to be a member of the group
-                query = `SELECT COUNT(*) AS count FROM group_members WHERE group_id = ? AND student_id = ?`;
+                query = `SELECT COUNT(*) AS count FROM \`group_members\` WHERE group_id = ? AND student_id = ?`;
                 break;
             case 'faculty':
                 // Faculty needs to be the allocated faculty for the group
