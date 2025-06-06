@@ -46,9 +46,9 @@ const isGroupMember = (req, res, next) => {
     if (!groupId) { return res.status(400).json({error: 'Group ID missing'}); }
 
     let userId, userType, query;
-    if (req.session.student) { userId = req.session.student.student_id; userType = 'student'; query = `SELECT COUNT(*) AS count FROM Group_Members WHERE group_id = ? AND student_id = ?`; }
-    else if (req.session.faculty) { userId = req.session.faculty.faculty_id; userType = 'faculty'; query = `SELECT COUNT(*) AS count FROM \`Group\` WHERE group_id = ? AND allocated_faculty_id = ?`;}
-    else if (req.session.staff) { userId = req.session.staff.staff_id; userType = 'staff'; query = `SELECT COUNT(*) AS count FROM \`Group\` WHERE group_id = ? AND assisting_staff_id = ?`;} // <<< Staff Check
+    if (req.session.student) { userId = req.session.student.student_id; userType = 'student'; query = `SELECT COUNT(*) AS count FROM \`group_members\` WHERE group_id = ? AND student_id = ?`; }
+    else if (req.session.faculty) { userId = req.session.faculty.faculty_id; userType = 'faculty'; query = `SELECT COUNT(*) AS count FROM \`group\` WHERE group_id = ? AND allocated_faculty_id = ?`;}
+    else if (req.session.staff) { userId = req.session.staff.staff_id; userType = 'staff'; query = `SELECT COUNT(*) AS count FROM \`group\` WHERE group_id = ? AND assisting_staff_id = ?`;} // <<< staff Check
     else { return res.status(401).json({ error: 'Unauthorized' }); }
 
     const params = [groupId, userId];
@@ -128,21 +128,21 @@ router.get(
             -- Senders
             s.student_id as sender_student_id, s.first_name as student_fname, s.last_name as student_lname,
             f.faculty_id as sender_faculty_id, f.first_name as faculty_fname, f.last_name as faculty_lname,
-            st.staff_id as sender_staff_id, st.first_name as staff_fname, st.last_name as staff_lname, -- <<< Added Staff Sender
+            st.staff_id as sender_staff_id, st.first_name as staff_fname, st.last_name as staff_lname, -- <<< Added staff Sender
             -- Reply Context
             reply.message_content AS reply_original_content,
             reply_s.first_name AS reply_student_fname, reply_s.last_name AS reply_student_lname,
             reply_f.first_name AS reply_faculty_fname, reply_f.last_name AS reply_faculty_lname,
-            reply_st.first_name AS reply_staff_fname, reply_st.last_name AS reply_staff_lname -- <<< Added Reply Staff Sender
-        FROM ChatMessage cm
-        LEFT JOIN Student s ON cm.sender_student_id = s.student_id
-        LEFT JOIN Faculty f ON cm.sender_faculty_id = f.faculty_id
-        LEFT JOIN Staff st ON cm.sender_staff_id = st.staff_id -- <<< JOIN Staff
+            reply_st.first_name AS reply_staff_fname, reply_st.last_name AS reply_staff_lname -- <<< Added Reply staff Sender
+        FROM chatmessage cm
+        LEFT JOIN student s ON cm.sender_student_id = s.student_id
+        LEFT JOIN faculty f ON cm.sender_faculty_id = f.faculty_id
+        LEFT JOIN staff st ON cm.sender_staff_id = st.staff_id -- <<< JOIN staff
         -- Reply Context Joins
-        LEFT JOIN ChatMessage reply ON cm.reply_to_message_id = reply.message_id
-        LEFT JOIN Student reply_s ON reply.sender_student_id = reply_s.student_id
-        LEFT JOIN Faculty reply_f ON reply.sender_faculty_id = reply_f.faculty_id
-        LEFT JOIN Staff reply_st ON reply.sender_staff_id = reply_st.staff_id -- <<< JOIN Reply Staff
+        LEFT JOIN chatmessage reply ON cm.reply_to_message_id = reply.message_id
+        LEFT JOIN student reply_s ON reply.sender_student_id = reply_s.student_id
+        LEFT JOIN faculty reply_f ON reply.sender_faculty_id = reply_f.faculty_id
+        LEFT JOIN staff reply_st ON reply.sender_staff_id = reply_st.staff_id -- <<< JOIN Reply staff
         WHERE cm.group_id = ?
         ORDER BY cm.timestamp ASC`;
 
@@ -165,8 +165,8 @@ router.get(
         } else if (msg.sender_staff_id) {
           senderId = msg.sender_staff_id;
           senderType = "staff";
-          senderName = `${msg.staff_fname} ${msg.staff_lname} (Staff)`;
-        } // <<< Format Staff Name
+          senderName = `${msg.staff_fname} ${msg.staff_lname} (staff)`;
+        } // <<< Format staff Name
 
         let replyContext = null;
         if (msg.reply_to_message_id) {
@@ -176,8 +176,8 @@ router.get(
           } else if (msg.reply_faculty_fname) {
             replySenderName = `Dr. ${msg.reply_faculty_fname} ${msg.reply_faculty_lname}`;
           } else if (msg.reply_staff_fname) {
-            replySenderName = `${msg.reply_staff_fname} ${msg.reply_staff_lname} (Staff)`;
-          } // <<< Format Reply Staff Name
+            replySenderName = `${msg.reply_staff_fname} ${msg.reply_staff_lname} (staff)`;
+          } // <<< Format Reply staff Name
           replyContext = {
             message_id: msg.reply_to_message_id,
             // Truncate original content for preview
@@ -233,11 +233,11 @@ router.get(
             cm.is_pinned, cm.message_content, cm.file_path, cm.file_original_name,
             s.student_id as sender_student_id, s.first_name as student_fname, s.last_name as student_lname,
             f.faculty_id as sender_faculty_id, f.first_name as faculty_fname, f.last_name as faculty_lname,
-            st.staff_id as sender_staff_id, st.first_name as staff_fname, st.last_name as staff_lname -- <<< Added Staff
-        FROM ChatMessage cm
-        LEFT JOIN Student s ON cm.sender_student_id = s.student_id
-        LEFT JOIN Faculty f ON cm.sender_faculty_id = f.faculty_id
-        LEFT JOIN Staff st ON cm.sender_staff_id = st.staff_id -- <<< JOIN Staff
+            st.staff_id as sender_staff_id, st.first_name as staff_fname, st.last_name as staff_lname -- <<< Added staff
+        FROM chatmessage cm
+        LEFT JOIN student s ON cm.sender_student_id = s.student_id
+        LEFT JOIN faculty f ON cm.sender_faculty_id = f.faculty_id
+        LEFT JOIN staff st ON cm.sender_staff_id = st.staff_id -- <<< JOIN staff
         WHERE cm.group_id = ? AND cm.is_pinned = TRUE
         ORDER BY cm.timestamp DESC`;
     try {
@@ -263,8 +263,8 @@ router.get(
           senderType = "staff";
           senderName = `${msg.staff_fname || ""} ${
             msg.staff_lname || ""
-          } (Staff)`.trim();
-        } // <<< Format Staff
+          } (staff)`.trim();
+        } // <<< Format staff
 
         return {
           /* ... (formatting like above, include ownership based on req.user) ... */
@@ -311,7 +311,7 @@ router.post(
       const [messages] = await db
         .promise()
         .query(
-          "SELECT is_pinned FROM ChatMessage WHERE message_id = ? AND group_id = ?",
+          "SELECT is_pinned FROM chatmessage WHERE message_id = ? AND group_id = ?",
           [messageId, groupId]
         );
 
@@ -326,7 +326,7 @@ router.post(
       // 2. Update the pin state in the DB
       const [updateResult] = await db
         .promise()
-        .query("UPDATE ChatMessage SET is_pinned = ? WHERE message_id = ?", [
+        .query("UPDATE chatmessage SET is_pinned = ? WHERE message_id = ?", [
           newPinState,
           messageId,
         ]);
@@ -398,7 +398,7 @@ router.post("/:groupId/upload",
     } else if (senderType === "staff") {
       staffIdField = senderId;
       if (req.session.staff)
-        senderName = `${req.session.staff.first_name} ${req.session.staff.last_name} (Staff)`;
+        senderName = `${req.session.staff.first_name} ${req.session.staff.last_name} (staff)`;
     } // <<< Set staff fields
     else {
       // Invalid user type from middleware? Should not happen.
@@ -426,7 +426,7 @@ router.post("/:groupId/upload",
 
     // Save file info to DB
     const insertQuery = `
-             INSERT INTO ChatMessage (group_id, sender_student_id, sender_faculty_id, sender_staff_id, file_path, file_original_name)
+             INSERT INTO chatmessage (group_id, sender_student_id, sender_faculty_id, sender_staff_id, file_path, file_original_name)
              VALUES (?, ?, ?, ?, ?, ?) -- Added sender_staff_id column
          `;
     const values = [

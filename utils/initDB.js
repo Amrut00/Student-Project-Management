@@ -4,7 +4,7 @@ const createTables = () => {
     const queries = [
         `SET FOREIGN_KEY_CHECKS = 0;`,
 
-        `CREATE TABLE IF NOT EXISTS \`Student\` (
+        `CREATE TABLE IF NOT EXISTS \`student\` (
             student_id INT AUTO_INCREMENT PRIMARY KEY,
             first_name VARCHAR(50) NOT NULL,
             last_name VARCHAR(50),
@@ -17,10 +17,10 @@ const createTables = () => {
             branch VARCHAR(20) NOT NULL,
             status ENUM('Pending', 'Allocated') DEFAULT 'Pending',
             group_id INT,
-            FOREIGN KEY (group_id) REFERENCES \`Group\`(group_id) ON DELETE SET NULL
+            FOREIGN KEY (group_id) REFERENCES \`group\`(group_id) ON DELETE SET NULL
         );`,
 
-        `CREATE TABLE IF NOT EXISTS \`Faculty\` (
+        `CREATE TABLE IF NOT EXISTS \`faculty\` (
             faculty_id INT AUTO_INCREMENT PRIMARY KEY,
             first_name VARCHAR(50) NOT NULL,
             last_name VARCHAR(50),
@@ -32,7 +32,7 @@ const createTables = () => {
             password VARCHAR(255) NOT NULL
         );`,
 
-        `CREATE TABLE IF NOT EXISTS \`Staff\` (
+        `CREATE TABLE IF NOT EXISTS \`staff\` (
             staff_id INT AUTO_INCREMENT PRIMARY KEY,
             first_name VARCHAR(50) NOT NULL,
             last_name VARCHAR(50),
@@ -41,39 +41,39 @@ const createTables = () => {
             email VARCHAR(100) UNIQUE NOT NULL,
             assisting_faculty_id INT,
             password VARCHAR(255) NOT NULL,
-            FOREIGN KEY (assisting_faculty_id) REFERENCES \`Faculty\`(faculty_id) ON DELETE SET NULL
+            FOREIGN KEY (assisting_faculty_id) REFERENCES \`faculty\`(faculty_id) ON DELETE SET NULL
         );`,
 
-        `CREATE TABLE IF NOT EXISTS \`Group\` (
+        `CREATE TABLE IF NOT EXISTS \`group\` (
             group_id INT AUTO_INCREMENT PRIMARY KEY,
             leader_id INT NOT NULL,
             status ENUM('Pending', 'Allocated') DEFAULT 'Pending',
             allocated_faculty_id INT NULL,
             assisting_staff_id INT NULL,
             project_title VARCHAR(255) NOT NULL,
-            FOREIGN KEY (leader_id) REFERENCES Student(student_id),
-            FOREIGN KEY (allocated_faculty_id) REFERENCES Faculty(faculty_id) ON DELETE SET NULL,
-            FOREIGN KEY (assisting_staff_id) REFERENCES \`Staff\`(staff_id) ON DELETE SET NULL
+            FOREIGN KEY (leader_id) REFERENCES student(student_id),
+            FOREIGN KEY (allocated_faculty_id) REFERENCES faculty(faculty_id) ON DELETE SET NULL,
+            FOREIGN KEY (assisting_staff_id) REFERENCES \`staff\`(staff_id) ON DELETE SET NULL
         );`,
 
-        `CREATE TABLE IF NOT EXISTS \`Group_Faculty_Preferences\` (
+        `CREATE TABLE IF NOT EXISTS \`group_faculty_preferences\` (
             preference_id INT AUTO_INCREMENT PRIMARY KEY,
             group_id INT NOT NULL,
             faculty_id INT NOT NULL,
             preference_order INT CHECK (preference_order BETWEEN 1 AND 4),
-            FOREIGN KEY (group_id) REFERENCES \`Group\`(group_id) ON DELETE CASCADE,
-            FOREIGN KEY (faculty_id) REFERENCES \`Faculty\`(faculty_id) ON DELETE CASCADE
+            FOREIGN KEY (group_id) REFERENCES \`group\`(group_id) ON DELETE CASCADE,
+            FOREIGN KEY (faculty_id) REFERENCES \`faculty\`(faculty_id) ON DELETE CASCADE
         );`,
 
-        `CREATE TABLE IF NOT EXISTS \`Group_Members\` (
+        `CREATE TABLE IF NOT EXISTS \`group_members\` (
             group_id INT,
             student_id INT,
             PRIMARY KEY (group_id, student_id),
-            FOREIGN KEY (group_id) REFERENCES \`Group\`(group_id) ON DELETE CASCADE,
-            FOREIGN KEY (student_id) REFERENCES \`Student\`(student_id) ON DELETE CASCADE
+            FOREIGN KEY (group_id) REFERENCES \`group\`(group_id) ON DELETE CASCADE,
+            FOREIGN KEY (student_id) REFERENCES \`student\`(student_id) ON DELETE CASCADE
         );`,
 
-        `CREATE TABLE IF NOT EXISTS \`Admin\` (
+        `CREATE TABLE IF NOT EXISTS \`admin\` (
             admin_id INT AUTO_INCREMENT PRIMARY KEY,
             first_name VARCHAR(50) NOT NULL,
             last_name VARCHAR(50),
@@ -83,7 +83,7 @@ const createTables = () => {
             role ENUM('Super Admin', 'Sub Admin') DEFAULT 'Sub Admin'
         );`,
 
-        `CREATE TABLE IF NOT EXISTS \`Faculty_Allocation_Limits\` (
+        `CREATE TABLE IF NOT EXISTS \`faculty_allocation_limits\` (
             limit_id INT AUTO_INCREMENT PRIMARY KEY,
             degree VARCHAR(255) NOT NULL,
             semester INT DEFAULT NULL,
@@ -91,7 +91,7 @@ const createTables = () => {
             CONSTRAINT unique_degree_semester_limit UNIQUE (degree, semester)
         );`,
 
-        `CREATE TABLE IF NOT EXISTS \`Panel\` (
+        `CREATE TABLE IF NOT EXISTS \`panel\` (
             panel_id INT AUTO_INCREMENT PRIMARY KEY,
             degree VARCHAR(100) NOT NULL,
             semester INT NOT NULL,
@@ -99,23 +99,23 @@ const createTables = () => {
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );`,
 
-        `CREATE TABLE IF NOT EXISTS \`Panel_Faculty_Members\` (
+        `CREATE TABLE IF NOT EXISTS \`panel_faculty_members\` (
             panel_id INT,
             faculty_id INT,
             PRIMARY KEY (panel_id, faculty_id),
-            FOREIGN KEY (panel_id) REFERENCES \`Panel\`(panel_id),
-            FOREIGN KEY (faculty_id) REFERENCES \`Faculty\`(faculty_id)
+            FOREIGN KEY (panel_id) REFERENCES \`panel\`(panel_id),
+            FOREIGN KEY (faculty_id) REFERENCES \`faculty\`(faculty_id)
         );`,
 
-        `CREATE TABLE IF NOT EXISTS \`Panel_Group_Assignments\` (
+        `CREATE TABLE IF NOT EXISTS \`panel_group_assignments\` (
             panel_id INT,
             group_id INT,
             PRIMARY KEY (panel_id, group_id),
-            FOREIGN KEY (panel_id) REFERENCES \`Panel\`(panel_id),
-            FOREIGN KEY (group_id) REFERENCES \`Group\`(group_id)
+            FOREIGN KEY (panel_id) REFERENCES \`panel\`(panel_id),
+            FOREIGN KEY (group_id) REFERENCES \`group\`(group_id)
         );`,
 
-        `CREATE TABLE IF NOT EXISTS \`ChatMessage\` (
+        `CREATE TABLE IF NOT EXISTS \`chatmessage\` (
             message_id INT AUTO_INCREMENT PRIMARY KEY,
             group_id INT NOT NULL,
 
@@ -136,15 +136,15 @@ const createTables = () => {
 
             is_pinned BOOLEAN NOT NULL DEFAULT FALSE,
 
-            FOREIGN KEY (group_id) REFERENCES \`Group\`(group_id) ON DELETE CASCADE,
-            FOREIGN KEY (sender_student_id) REFERENCES \`Student\`(student_id) ON DELETE SET NULL,
-            FOREIGN KEY (sender_faculty_id) REFERENCES \`Faculty\`(faculty_id) ON DELETE SET NULL,
-            FOREIGN KEY (sender_staff_id) REFERENCES \`Staff\`(staff_id) ON DELETE SET NULL,
-            FOREIGN KEY (reply_to_message_id) REFERENCES \`ChatMessage\`(message_id) ON DELETE SET NULL
+            FOREIGN KEY (group_id) REFERENCES \`group\`(group_id) ON DELETE CASCADE,
+            FOREIGN KEY (sender_student_id) REFERENCES \`student\`(student_id) ON DELETE SET NULL,
+            FOREIGN KEY (sender_faculty_id) REFERENCES \`faculty\`(faculty_id) ON DELETE SET NULL,
+            FOREIGN KEY (sender_staff_id) REFERENCES \`staff\`(staff_id) ON DELETE SET NULL,
+            FOREIGN KEY (reply_to_message_id) REFERENCES \`chatmessage\`(message_id) ON DELETE SET NULL
         );`,
 
-        `CREATE INDEX IF NOT EXISTS idx_chatmessage_pinned ON \`ChatMessage\` (group_id, is_pinned, timestamp);`,
-        `CREATE INDEX IF NOT EXISTS idx_chatmessage_reply ON \`ChatMessage\` (reply_to_message_id);`,
+        `CREATE INDEX IF NOT EXISTS idx_chatmessage_pinned ON \`chatmessage\` (group_id, is_pinned, timestamp);`,
+        `CREATE INDEX IF NOT EXISTS idx_chatmessage_reply ON \`chatmessage\` (reply_to_message_id);`,
 
         `SET FOREIGN_KEY_CHECKS = 1;`
     ];
